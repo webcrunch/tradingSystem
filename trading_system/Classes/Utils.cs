@@ -91,6 +91,23 @@ class Extra
     }
 
 
+    public static void Trademenu()
+    {
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine(" ╔══════════════════════════╗ ");
+        Console.WriteLine(" ║     Trade Menu           ║ ");
+        Console.WriteLine(" ╠══════════════════════════╣ ");
+        Console.WriteLine(" ║ 1. Trade                 ║ ");
+        Console.WriteLine(" ║ 2. message of trades     ║ ");
+        Console.WriteLine(" ║ 3. Go up                 ║ ");
+        Console.WriteLine(" ╚══════════════════════════╝ ");
+        Console.ResetColor(); // Återställer textfärgen
+    }
+
+
     public static void itemMenu(string text)
     {
         Console.WriteLine();
@@ -108,6 +125,19 @@ class Extra
         Console.ResetColor(); // Återställer textfärgen
     }
 
+
+    public static void Displayusers(List<User> users, User active_user)
+    {
+        Console.WriteLine("List of users:");
+        for (int i = 0; i < users.Count; i++)
+        {
+            if (users[i] != active_user)
+            {
+                Console.WriteLine($"{i + 1}. {users[i].Email}");
+            }
+
+        }
+    }
 
     public static void AddLogin()
     {
