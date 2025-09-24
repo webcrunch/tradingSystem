@@ -8,8 +8,18 @@ namespace TradingSystem;
 // }
 
 
+
 class Extra
 {
+
+    public static void DisplayAlertText(string text, int delay = 50)
+    {
+        Console.WriteLine();
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($"{text}");
+        Console.ResetColor(); // Återställer textfärgen        
+    }
+
     public static bool UserExisting(List<User> users)
     {
         return users.Count > 0;
