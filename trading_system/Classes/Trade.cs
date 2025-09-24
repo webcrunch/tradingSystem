@@ -12,12 +12,12 @@ enum TradeStatus
 
 class Trade
 {
-    public string Sender;
-    public string Receiver;
+    public User Sender;
+    public User Receiver;
     public Item[] ItemTraded;
 
     public TradeStatus Status = TradeStatus.None;
-    public Trade(string sender, string receiver, Item[] items)
+    public Trade(User sender, User receiver, Item[] items)
     {
         Sender = sender;
         Receiver = receiver;
