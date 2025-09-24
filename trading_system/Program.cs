@@ -23,13 +23,19 @@ while (continueRunning)
         case "1":
             // Code to create account
             Console.WriteLine("Create account selected.");
+            Console.Write("Enter username for the account: ");
             string inpiutUsername = Console.ReadLine() ?? "";
+            Console.Write("Enter password for the account: ");
             string inputPassword = Console.ReadLine() ?? "";
-            users.Add(new user(inpiutUsername, inputPassword));
+            users.Add(new User(inpiutUsername, inputPassword));
             Console.WriteLine("user created.");
             Thread.Sleep(4000);
             break;
         case "2":
+            foreach (User user in users)
+            {
+                Console.WriteLine($"Username: {user.Username}");
+            }
             Console.WriteLine("Login account selected.");
             break;
         case "3":
