@@ -1,6 +1,6 @@
 ﻿// Todos for the trading system:
 // A user needs to be able to register an account  ---- klart
-// A user needs to be able to log out.
+// A user needs to be able to log out. ----- Klart
 // A user needs to be able to log in. ----- Klart
 // A user needs to be able to upload information about the item they wish to trade.
 // A user needs to be able to browse a list of other users items.
@@ -12,9 +12,10 @@
 
 using TradingSystem;
 List<User> users = new List<User>();
+List<Item> items = new List<Item>();
 
 bool continueRunning = true;
-IUser? active_user = null;
+User? active_user = null;
 
 while (continueRunning)
 {
@@ -71,7 +72,7 @@ while (continueRunning)
                 }
                 else
                 {
-                    Console.WriteLine("You are already logged in.");
+                    Extra.DisplayAlertText("You are already logged in.");
                     Thread.Sleep(3000);
                     break;
                 }
@@ -94,9 +95,30 @@ while (continueRunning)
             }
 
         case "4":
-            Console.WriteLine("Feature not implemented yet.");
+            if (active_user == null && !Extra.UserExisting(users))
+            {
+                Extra.DisplayAlertText("You need to be logged in to add an item.");
+                Thread.Sleep(3000);
+            }
+            else
+            {
+                Console.WriteLine("Adding new item selected.");
+                Console.Write("Enter item name: ");
+                string itemName = Console.ReadLine() ?? "";
+                Console.Write("Enter item description: ");
+                string itemDescription = Console.ReadLine() ?? "";
+                items.Add(new Item(itemName, itemDescription));
+                Console.WriteLine("Item added successfully.");
+                active_user?.AddItem(new Item(itemName, itemDescription));
+                Thread.Sleep(3000);
+            }
+
             break;
         case "5":
+            Console.WriteLine("Your items:");
+            active_user?.ShowItems(items);
+            break;
+        case "6":
             Console.WriteLine("Exiting...");
             continueRunning = false;
             break;

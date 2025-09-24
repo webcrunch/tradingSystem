@@ -38,8 +38,9 @@ class Extra
         Console.WriteLine("║     1. (Create account)        ║");
         Console.WriteLine("║     2. (Login account)         ║");
         Console.WriteLine("║     3. (Logout account)        ║");
-        Console.WriteLine("║     4. (handle account)        ║");
-        Console.WriteLine("║     5. (Exit)                  ║");
+        Console.WriteLine("║     4. (Create item)           ║");
+        Console.WriteLine("║     5. (Show Your item)        ║");
+        Console.WriteLine("║     6. (Exit)                  ║");
         Console.WriteLine("╚════════════════════════════════╝");
         Console.WriteLine();
         Console.WriteLine();
