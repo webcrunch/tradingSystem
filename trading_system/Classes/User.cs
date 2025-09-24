@@ -5,6 +5,7 @@ class User
     public string Email;
     string _password;
     List<Item> Items = new List<Item>();
+    public string message = "";
     public User(string username, string password)
     {
         Email = username;
