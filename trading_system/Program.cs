@@ -115,8 +115,17 @@ while (continueRunning)
 
             break;
         case "5":
-            Console.WriteLine("Your items:");
-            active_user?.ShowItems(items);
+            if (active_user == null && !Extra.UserExisting(users))
+            {
+                Extra.DisplayAlertText("You need to be logged in to view your items.");
+                Thread.Sleep(3000);
+                break;
+            }
+            else
+            {
+                Console.WriteLine("Your items:");
+                active_user?.ShowItems(items);
+            }
             break;
         case "6":
             Console.WriteLine("Exiting...");

@@ -1,6 +1,6 @@
-namespace TradingSystem;
+// namespace TradingSystem;
 
-interface IUser
-{
-    public bool TryLogin(string username, string password);
-}
+// interface IUser
+// {
+//     public bool TryLogin(string username, string password);
+// }
