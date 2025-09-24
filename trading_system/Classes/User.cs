@@ -1,11 +1,11 @@
 namespace TradingSystem;
 
-public class user
+public class User
 {
-    public string Username
-    string _password
+    public string Username;
+    string _password;
 
-    public user(string username, string password)
+    public User(string username, string password)
     {
         Username = username;
         _password = password;
