@@ -55,7 +55,8 @@ while (continueRunning)
                 }
                 else
                 {
-                    Console.WriteLine("Login failed. Incorrect username or password.");
+                    Extra.DisplayAlertText("Login failed. Incorrect username or password.");
+                    // Console.WriteLine("Login failed. Incorrect username or password.");
                 }
                 Thread.Sleep(3000);
             }
@@ -63,7 +64,8 @@ while (continueRunning)
             {
                 if (active_user == null)
                 {
-                    Console.WriteLine("No users available. Please create an account first.");
+                    Extra.DisplayAlertText("No users available. Please create an account first.");
+                    // Console.WriteLine("No users available. Please create an account first.");
                     Thread.Sleep(3000);
                     break;
                 }
@@ -73,14 +75,24 @@ while (continueRunning)
                     Thread.Sleep(3000);
                     break;
                 }
-
             }
             break;
         case "3":
-            active_user = null;
-            Console.WriteLine("Logged out successfully.");
-            Thread.Sleep(3000);
-            break;
+            if (active_user != null)
+            {
+                active_user = null;
+                Console.WriteLine("Logged out successfully.");
+                Thread.Sleep(3000);
+                break;
+            }
+            else
+            {
+                Extra.DisplayAlertText("No user is currently logged in.");
+                // Console.WriteLine("No user is currently logged in.");
+                Thread.Sleep(3000);
+                break;
+            }
+
         case "4":
             Console.WriteLine("Feature not implemented yet.");
             break;
@@ -89,5 +101,4 @@ while (continueRunning)
             continueRunning = false;
             break;
     }
-    // Main trading system logic here
 }
