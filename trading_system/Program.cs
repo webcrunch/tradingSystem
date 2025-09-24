@@ -3,9 +3,14 @@
 // A user needs to be able to log out. ----- Klart
 // A user needs to be able to log in. ----- Klart
 // A user needs to be able to upload information about the item they wish to trade. ---- Klart
-// A user needs to be able to browse a list of other users items.
-// A user needs to be able to request a trade for other users items.
+
+
+// A user needs to be able to browse a list of other users items. ---- Klart
+
+// A user needs to be able to request a trade for other users items. WIP
+
 // A user needs to be able to browse trade requests.
+
 // A user needs to be able to accept a trade request.
 // A user needs to be able to deny a trade request.
 // A user needs to be able to browse completed requests.
@@ -19,6 +24,13 @@ List<Item> items = new List<Item>();
 bool continueRunning = true;
 User? active_user = null;
 
+
+// Creating a dump user and item for testing
+users.Add(new User("test", "test")); // Default user for testing
+active_user = users[0];
+active_user.AddItem(new Item("Böcker", "32 stycken nalle puh böcker")); // Default item for testing
+active_user = null; // Log out the test user
+
 while (continueRunning)
 {
     Extra.MainMenu();
@@ -28,10 +40,10 @@ while (continueRunning)
             // Code to create account
             Console.WriteLine("Create account selected.");
             Console.Write("Enter username for the account: ");
-            string CreateInputUsername = Console.ReadLine() ?? "";
+            string? CreateInputUsername = Console.ReadLine();
             Console.Write("Enter password for the account: ");
-            string CreateInputPassword = Console.ReadLine() ?? "";
-            users.Add(new User(CreateInputUsername, CreateInputPassword));
+            string? CreateInputPassword = Console.ReadLine();
+            users.Add(new User(CreateInputUsername ?? "", CreateInputPassword ?? ""));
             Console.WriteLine("user created.");
             Thread.Sleep(3000);
             break;
@@ -134,7 +146,12 @@ while (continueRunning)
             }
             else
             {
-                Console.WriteLine("Showing all items:");
+                Console.WriteLine("Showing all others items:");
+                foreach (User user in users)
+                {
+                    if (user == active_user) continue; // Skip the active user's items
+                    user.ShowItems(items);
+                }
             }
             break;
         case "7":
