@@ -30,6 +30,7 @@ User? active_user = null;
 users.Add(new User("test", "test")); // Default user for testing
 active_user = users[0];
 active_user.AddItem(new Item("Böcker", "32 stycken nalle puh böcker")); // Default item for testing
+active_user.AddItem(new Item("handskar", "2 par elefanthanskar")); // Default item for testing
 active_user = null; // Log out the test user
 
 while (continueRunning)
