@@ -7,6 +7,7 @@
 
 // A user needs to be able to browse a list of other users items. ---- Klart
 
+// Refactor the need above . ---- Klart mayb
 // A user needs to be able to request a trade for other users items. WIP
 
 // A user needs to be able to browse trade requests.
@@ -33,124 +34,120 @@ active_user = null; // Log out the test user
 
 while (continueRunning)
 {
-    Extra.MainMenu();
+    Extra.MainMenu(active_user?.Email ?? "No user logged in");
+
     switch (Console.ReadLine() ?? "")
     {
         case "1":
-            // Code to create account
-            Console.WriteLine("Create account selected.");
-            Console.Write("Enter username for the account: ");
-            string? CreateInputUsername = Console.ReadLine();
-            Console.Write("Enter password for the account: ");
-            string? CreateInputPassword = Console.ReadLine();
-            users.Add(new User(CreateInputUsername ?? "", CreateInputPassword ?? ""));
-            Console.WriteLine("user created.");
-            Thread.Sleep(3000);
+            bool loginRunning = true;
+            while (loginRunning)
+            {
+                Extra.AddLogin();
+                switch (Console.ReadLine() ?? "")
+                {
+                    case "1":
+                        Console.Write("Enter username: ");
+                        string? inputUsername = Console.ReadLine();
+                        Console.Write("Enter password: ");
+                        string? inputPassword = Console.ReadLine();
+                        User? foundUser = users.Find(user => user.TryLogin(inputUsername ?? "", inputPassword ?? ""));
+                        if (foundUser != null)
+                        {
+                            active_user = foundUser;
+                            loginRunning = false;
+                            Extra.DisplaySuccesText("Login successful.");
+                        }
+                        else
+                        {
+                            Extra.DisplayAlertText("Login failed. Incorrect username or password.");
+                        }
+                        Thread.Sleep(3000);
+                        break;
+                    case "2":
+                        if (active_user != null)
+                        {
+                            active_user = null;
+                            Extra.DisplaySuccesText("Logged out successfully.");
+                            Thread.Sleep(3000);
+                        }
+                        else
+                        {
+                            Extra.DisplayAlertText("No user is currently logged in.");
+                            Thread.Sleep(3000);
+                            loginRunning = false;
+                            break;
+                        }
+                        break;
+                }
+            }
             break;
         case "2":
-            if (Extra.UserExisting(users) && active_user == null)
+            bool accountRunning = true;
+            while (accountRunning)
             {
-                Console.WriteLine("Login account selected.");
-                Console.Write("Enter username: ");
-                string inputUsername = Console.ReadLine() ?? "";
-                Console.Write("Enter password: ");
-                string inputPassword = Console.ReadLine() ?? "";
-
-                foreach (var user in users)
+                Extra.Accountmenu();
+                switch (Console.ReadLine() ?? "")
                 {
-                    if (user.TryLogin(inputUsername, inputPassword))
-                    {
-                        active_user = user;
+                    case "1":
+                        Console.WriteLine("Create account selected.");
+                        Console.Write("Enter username for the account: ");
+                        string? CreateInputUsername = Console.ReadLine();
+                        Console.Write("Enter password for the account: ");
+                        string? CreateInputPassword = Console.ReadLine();
+                        users.Add(new User(CreateInputUsername ?? "", CreateInputPassword ?? ""));
+                        Extra.DisplaySuccesText("Account created successfully.");
+                        Thread.Sleep(3000);
                         break;
-                    }
-                }
-                if (active_user != null)
-                {
-                    Console.WriteLine("Login successful!");
-                }
-                else
-                {
-                    Extra.DisplayAlertText("Login failed. Incorrect username or password.");
-                }
-                Thread.Sleep(3000);
-            }
-            else
-            {
-                if (active_user == null)
-                {
-                    Extra.DisplayAlertText("No users available. Please create an account first.");
-                    Thread.Sleep(3000);
-                    break;
-                }
-                else
-                {
-                    Extra.DisplayAlertText("You are already logged in.");
-                    Thread.Sleep(3000);
-                    break;
+                    case "3":
+                        accountRunning = false;
+                        break;
                 }
             }
             break;
         case "3":
-            if (active_user != null)
-            {
-                active_user = null;
-                Console.WriteLine("Logged out successfully.");
-                Thread.Sleep(3000);
-                break;
-            }
-            else
+            if (active_user == null)
             {
                 Extra.DisplayAlertText("No user is currently logged in.");
                 Thread.Sleep(3000);
                 break;
             }
+            else
+            {
+                bool itemRunning = true;
 
-        case "4":
-            if (active_user == null && !Extra.UserExisting(users))
-            {
-                Extra.DisplayAlertText("You need to be logged in to add an item.");
-                Thread.Sleep(3000);
-            }
-            else
-            {
-                Console.WriteLine("Adding new item selected.");
-                Console.Write("Enter item name: ");
-                string itemName = Console.ReadLine() ?? "";
-                Console.Write("Enter item description: ");
-                string itemDescription = Console.ReadLine() ?? "";
-                items.Add(new Item(itemName, itemDescription));
-                Console.WriteLine("Item added successfully.");
-                active_user?.AddItem(new Item(itemName, itemDescription));
-                Thread.Sleep(3000);
-            }
-
-            break;
-        case "5":
-            if (active_user == null && !Extra.UserExisting(users))
-            {
-                Extra.DisplayAlertText("You need to be logged in to view your items.");
-                Thread.Sleep(3000);
-                break;
-            }
-            else
-            {
-                Console.WriteLine("Your items:");
-                active_user?.ShowItems(items);
-            }
-            break;
-        case "6":
-            if (active_user == null && !Extra.UserExisting(users))
-            {
-                Extra.DisplayAlertText("You need to be logged in to view all items.");
-                Thread.Sleep(3000);
-            }
-            else
-            {
-                Console.WriteLine("Showing all others items:");
-                foreach (User user in users)
+                while (itemRunning)
                 {
-                    if (user == active_user) continue; // Skip the active user's items
-                    user.ShowItems(items);
+
+                    Extra.itemMenu("Item");
+                    switch (Console.ReadLine() ?? "")
+                    {
+                        case "1":
+                            Console.WriteLine("Adding new item selected.");
+                            Console.Write("Enter item name: ");
+                            string itemName = Console.ReadLine() ?? "";
+                            Console.Write("Enter item description: ");
+                            string itemDescription = Console.ReadLine() ?? "";
+                            items.Add(new Item(itemName, itemDescription));
+                            Extra.DisplaySuccesText("Item added successfully.");
+                            active_user?.AddItem(new Item(itemName, itemDescription));
+                            Thread.Sleep(3000);
+                            break;
+                        case "2":
+                            Console.WriteLine("Your items:");
+                            active_user?.ShowItems(items);
+                            break;
+                        case "3":
+                            Console.WriteLine("Showing all others items:");
+                            foreach (User user in users)
+                            {
+                                if (user == active_user) continue; // Skip the active user's items
+                                user.ShowItems(items);
+                            }
+                            break;
+                        case "4":
+                            itemRunning = false;
+                            break;
+                    }
                 }
             }
             break;
