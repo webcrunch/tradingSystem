@@ -2,13 +2,15 @@
 // A user needs to be able to register an account  ---- klart
 // A user needs to be able to log out. ----- Klart
 // A user needs to be able to log in. ----- Klart
-// A user needs to be able to upload information about the item they wish to trade.
+// A user needs to be able to upload information about the item they wish to trade. ---- Klart
 // A user needs to be able to browse a list of other users items.
 // A user needs to be able to request a trade for other users items.
 // A user needs to be able to browse trade requests.
 // A user needs to be able to accept a trade request.
 // A user needs to be able to deny a trade request.
 // A user needs to be able to browse completed requests.
+
+/// only accept/deny the user is the recepter. 
 
 using TradingSystem;
 List<User> users = new List<User>();
@@ -57,7 +59,6 @@ while (continueRunning)
                 else
                 {
                     Extra.DisplayAlertText("Login failed. Incorrect username or password.");
-                    // Console.WriteLine("Login failed. Incorrect username or password.");
                 }
                 Thread.Sleep(3000);
             }
@@ -66,7 +67,6 @@ while (continueRunning)
                 if (active_user == null)
                 {
                     Extra.DisplayAlertText("No users available. Please create an account first.");
-                    // Console.WriteLine("No users available. Please create an account first.");
                     Thread.Sleep(3000);
                     break;
                 }
@@ -89,7 +89,6 @@ while (continueRunning)
             else
             {
                 Extra.DisplayAlertText("No user is currently logged in.");
-                // Console.WriteLine("No user is currently logged in.");
                 Thread.Sleep(3000);
                 break;
             }
@@ -128,6 +127,17 @@ while (continueRunning)
             }
             break;
         case "6":
+            if (active_user == null && !Extra.UserExisting(users))
+            {
+                Extra.DisplayAlertText("You need to be logged in to view all items.");
+                Thread.Sleep(3000);
+            }
+            else
+            {
+                Console.WriteLine("Showing all items:");
+            }
+            break;
+        case "7":
             Console.WriteLine("Exiting...");
             continueRunning = false;
             break;
