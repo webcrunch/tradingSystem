@@ -10,6 +10,10 @@ namespace TradingSystem;
 
 class Extra
 {
+    public static bool UserExisting(List<User> users)
+    {
+        return users.Count > 0;
+    }
 
     public static void MainMenu()
     {
@@ -18,11 +22,14 @@ class Extra
         Console.WriteLine();
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("╔════════════════════════════════╗");
-        Console.WriteLine("║        Trading System          ║");
+        Console.WriteLine("║    --  Trading System  --      ║");
+        Console.WriteLine("║        Choose a number         ║");
         Console.WriteLine("╠════════════════════════════════╣");
-        Console.WriteLine("║     1. (create account)        ║");
+        Console.WriteLine("║     1. (Create account)        ║");
         Console.WriteLine("║     2. (Login account)         ║");
-        Console.WriteLine("║     3. (Exit)                  ║");
+        Console.WriteLine("║     3. (Logout account)        ║");
+        Console.WriteLine("║     4. (handle account)        ║");
+        Console.WriteLine("║     5. (Exit)                  ║");
         Console.WriteLine("╚════════════════════════════════╝");
         Console.WriteLine();
         Console.WriteLine();
@@ -45,9 +52,5 @@ class Extra
         Console.WriteLine("║ 4. Quit              ║");
         Console.WriteLine("╚══════════════════════╝");
         Console.ResetColor(); // Återställer textfärgen
-    }
-    public static void DisplayType()
-    {
-
     }
 }
