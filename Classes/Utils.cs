@@ -102,7 +102,8 @@ class Extra
         Console.WriteLine(" ╠══════════════════════════╣ ");
         Console.WriteLine(" ║ 1. Trade                 ║ ");
         Console.WriteLine(" ║ 2. message of trades     ║ ");
-        Console.WriteLine(" ║ 3. Go up                 ║ ");
+        Console.WriteLine(" ║ 3. handle trades         ║ ");
+        Console.WriteLine(" ║ 4. Go up                 ║ ");
         Console.WriteLine(" ╚══════════════════════════╝ ");
         Console.ResetColor(); // Återställer textfärgen
     }
@@ -139,6 +140,24 @@ class Extra
         }
     }
 
+
+    public static void ShowMenyTradeHandling()
+    {
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine(" ╔═════════════════════════╗ ");
+        Console.WriteLine(" ║       Trade Menu        ║ ");
+        Console.WriteLine(" ╠═════════════════════════╣ ");
+        Console.WriteLine(" ║ 1. All Sent request     ║ ");
+        Console.WriteLine(" ║ 2. All Recieved request ║ ");
+        Console.WriteLine(" ║ 3. All Accepted request ║ ");
+        Console.WriteLine(" ║ 4. All Denied request   ║ ");
+        Console.WriteLine(" ║ 5. Go up                ║ ");
+        Console.WriteLine(" ╚═════════════════════════╝ ");
+        Console.ResetColor(); // Återställer textfärgen
+    }
     public static void AddLogin()
     {
         Console.WriteLine();
