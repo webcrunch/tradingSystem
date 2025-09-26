@@ -250,8 +250,7 @@ while (continueRunning)
                                         Console.WriteLine("Sent trade requests:");
                                         for (int i = 0; i < sentTrades.Count; i++)
                                         {
-                                            var trade = sentTrades[i];
-                                            // Utskrift av detaljer
+                                            Trade trade = sentTrades[i];
                                             Console.WriteLine($"{i + 1}. Status: {trade.Status} | To: {trade.Receiver.Email} | You offer: {trade.ItemTraded[0].Name} | You want: {trade.ItemTraded[1].Name}");
                                         }
                                         Thread.Sleep(3000);
@@ -304,12 +303,72 @@ while (continueRunning)
                                             Console.WriteLine($"{i + 1}. Status: {trade.Status} | From: {trade.Sender.Email} | They offer: {trade.ItemTraded[0].Name} | They want: {trade.ItemTraded[1].Name}");
                                         }
                                         Console.Write("Select a trade to handle (enter number): ");
+                                        if (int.TryParse(Console.ReadLine(), out int tradeIndex) && tradeIndex > 0 && tradeIndex <= recivedTrades.Count)
+                                        {
+                                            Trade selectedTrade = recivedTrades[tradeIndex - 1];
+                                            Console.WriteLine("1. Accept Trade");
+                                            Console.WriteLine("2. Deny Trade");
+                                            Console.Write("Choose an option: ");
+                                            string? actionChoice = Console.ReadLine();
+                                            if (actionChoice == "1")
+                                            {
+                                                selectedTrade.AcceptTrade();
+                                                Extra.DisplaySuccesText("Trade accepted.");
+                                            }
+                                            else if (actionChoice == "2")
+                                            {
+                                                selectedTrade.DenyTrade();
+                                                Extra.DisplaySuccesText("Trade denied.");
+                                            }
+                                            else
+                                            {
+                                                Extra.DisplayAlertText("Invalid action choice.");
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Extra.DisplayAlertText("Invalid trade selection.");
+                                        }
                                         Thread.Sleep(2000);
                                     }
                                     break;
                                 case "3":
+                                    List<Trade> acceptedTrades = trades.Where(t => (t.Sender == active_user || t.Receiver == active_user) && t.Status == TradeStatus.Accepted).ToList();
+                                    if (acceptedTrades.Count == 0)
+                                    {
+                                        Extra.DisplayAlertText("No accepted trade requests.");
+                                        Thread.Sleep(3000);
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Accepted trade requests:");
+                                        for (int i = 0; i < acceptedTrades.Count; i++)
+                                        {
+                                            Trade trade = acceptedTrades[i];
+                                            Console.WriteLine($"{i + 1}. Status: {trade.Status} | With: {(trade.Sender == active_user ? trade.Receiver.Email : trade.Sender.Email)} | You offered: {trade.ItemTraded[0].Name} | You received: {trade.ItemTraded[1].Name}");
+                                        }
+                                        Thread.Sleep(3000);
+                                    }
                                     break;
                                 case "4":
+                                    List<Trade> deniedTrades = trades.Where(t => (t.Sender == active_user || t.Receiver == active_user) && t.Status == TradeStatus.Denied).ToList();
+                                    if (deniedTrades.Count == 0)
+                                    {
+                                        Extra.DisplayAlertText("No denied trade requests.");
+                                        Thread.Sleep(3000);
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Denied trade requests:");
+                                        for (int i = 0; i < deniedTrades.Count; i++)
+                                        {
+                                            Trade trade = deniedTrades[i];
+                                            Console.WriteLine($"{i + 1}. Status: {trade.Status} | With: {(trade.Sender == active_user ? trade.Receiver.Email : trade.Sender.Email)} | You offered: {trade.ItemTraded[0].Name} | You wanted: {trade.ItemTraded[1].Name}");
+                                        }
+                                        Thread.Sleep(3000);
+                                    }
                                     break;
                                 case "5":
                                     tradeRunning = false;
@@ -317,57 +376,7 @@ while (continueRunning)
                                     break;
                             }
 
-                            // Hantera mottagna trade requests
-                            // Hämta alla trades där den inloggade användaren är mottagare och status är Pending
 
-
-                            // var userTrades = trades.Where(t => t.Receiver == active_user && t.Status == TradeStatus.Pending).ToList();
-                            // if (userTrades.Count == 0)
-                            // {
-                            //     Extra.DisplayAlertText("No pending trade requests.");
-                            //     Thread.Sleep(3000);
-                            // }
-                            // else
-                            // {
-                            //     Console.WriteLine("Pending trade requests:");
-                            //     for (int i = 0; i < userTrades.Count; i++)
-                            //     {
-                            //         var trade = userTrades[i];
-                            //         // Utskrift av detaljer
-                            //         Console.WriteLine($"{i + 1}. Status: {trade.Status} | From: {trade.Sender.Email} | They offer: {trade.ItemTraded[0].Name} | They want: {trade.ItemTraded[1].Name}");
-                            //     }
-
-                            //     // ... (Hantering av Accept/Deny fortsätter här)
-                            //     Console.Write("Select a trade to handle (enter number): ");
-                            //     if (int.TryParse(Console.ReadLine(), out int tradeIndex) && tradeIndex > 0 && tradeIndex <= userTrades.Count)
-                            //     {
-                            //         var selectedTrade = userTrades[tradeIndex - 1];
-                            //         Console.WriteLine("1. Accept Trade");
-                            //         Console.WriteLine("2. Deny Trade");
-                            //         Console.Write("Enter your choice: ");
-                            //         string? choice = Console.ReadLine();
-
-                            //         if (choice == "1")
-                            //         {
-                            //             selectedTrade.AcceptTrade();
-                            //             Extra.DisplaySuccesText("Trade accepted and items exchanged.");
-                            //         }
-                            //         else if (choice == "2")
-                            //         {
-                            //             selectedTrade.DenyTrade();
-                            //             Extra.DisplaySuccesText("Trade denied.");
-                            //         }
-                            //         else
-                            //         {
-                            //             Extra.DisplayAlertText("Invalid choice.");
-                            //         }
-                            //     }
-                            //     else
-                            //     {
-                            //         Extra.DisplayAlertText("Invalid trade selection.");
-                            //     }
-                            // }
-                            // Thread.Sleep(3000); // Långare delay här kan vara bra
 
                             break;
                         case "4":
