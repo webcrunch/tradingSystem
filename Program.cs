@@ -13,52 +13,93 @@
 // A user needs to be able to cancel a sent trade request. ---- Klart
 
 
-// A user needs to be able to browse trade requests.
+// A user needs to be able to browse trade requests. --- Klart
 
-// A user needs to be able to accept a trade request.
-// A user needs to be able to deny a trade request. 
+// A user needs to be able to accept a trade request. --- Klart
+// A user needs to be able to deny a trade request. --- Klart
 
-// A user needs to be able to browse completed requests.
+// A user needs to be able to browse completed requests. --- Klart
 
 /// only accept/deny the user is the recepter. ---- Klart
-/// only cancel the user is the sender. ---- Klart
+/// only cancel the user if the sender. ---- Klart
 
+// I am usign the TradingSystem namespace.
 using TradingSystem;
+//  For handle the data for the users and the items and trades i am creating three lists.
+// The dataformat for each list is a from User class, Item class and Trade class.
+// i calling them users, items and trades.
 List<User> users = new List<User>();
 List<Item> items = new List<Item>();
 List<Trade> trades = new List<Trade>();
-bool continueRunning = true;
-User? active_user = null;
 
 
+// _______ dummy data for testing purposes _________
 // Creating a dump user and item for testing
-users.Add(new User("test", "test")); // Default user for testing
-active_user = users[0];
-users.Add(new User("albert", "beteman")); // Another  user for testing
-users.Add(new User("jarl", "jarleman")); // Another  user for testing
-active_user.AddItem(new Item("Böcker", "32 stycken nalle puh böcker")); // Default item for testing
-active_user.AddItem(new Item("handskar", "2 par elefanthanskar")); // Default item for testing
+// creating three users and two items for each user.
+// This is just for testing purposes. and to be able to see how the program works.
+users.Add(new User("test", "test")); // User1 for testing
+users.Add(new User("albert", "beteman")); // User2 for testing
+users.Add(new User("jarl", "jarleman")); // User3 user for testing
+// Log in and create some items for the first user
+active_user = users[0]; // Log in the test user
+active_user.AddItem(new Item("Böcker", "32 stycken nalle puh böcker")); // Items for testing
+active_user.AddItem(new Item("handskar", "2 par elefanthanskar")); // Items for testing
 active_user = null; // Log out the test user
-active_user = users[1];
-active_user.AddItem(new Item("Abombs", "100 stora atombomber")); // Default item for testing
-active_user.AddItem(new Item("skor", "2 par elefantskor")); // Default item for testing
+// Creating dummy data and log in for the second user
+active_user = users[1]; // Log in the test user
+active_user.AddItem(new Item("Abombs", "100 stora atombomber")); // Items for testing
+active_user.AddItem(new Item("skor", "2 par elefantskor")); // Items for testing
 active_user = null; // Log out the test user
-active_user = users[2];
-active_user.AddItem(new Item("Bilar", "32 stycken leksaksbilar")); // Default item for testing
-active_user.AddItem(new Item("dator", "en macbook pro 2020"));
+// Creating dummy data and log in for the third user
+active_user = users[2]; // Log in the test user
+active_user.AddItem(new Item("Bilar", "32 stycken leksaksbilar")); // Items for testing
+active_user.AddItem(new Item("dator", "en macbook pro 2020")); // Items for testing
 active_user = null; // Log out the test user
+// _______ end of dummy data for testing purposes _________
 
+// i have decided to create a class named Extra for handling the menu system.
+// The class is static because i do not need to create an instance of it.
+// it is mostly for displaying the menus and some helper functions. 
+// And to try to keep the Program.cs file clean.
+
+// This bool is for controlling the main loop of the program.
+bool continueRunning = true;
+// This is for keeping track of the currently logged-in user. 
+// default value is null, meaning no user is logged in.
+User? active_user = null;
+// to keep a live loop of the program until the user decides to exit.
+// I have choosen to build the logic for the menu system with two layers. 
+// Login - Account - Item - Trade - Exit
+// Login - login - log out - go back to main menu
+// Account - create account - go back to main menu
+// Item - add item - show my items - show all other users items - go back to main menu
+// Trade - request trade - message of trades - handle trades - go back to main menu
+// I have tried to keep it simple and easy to understand for the user. Still some improvements can be made. 
+// Especially in the trade handling menu to handle exiting in a user input face.
+// Each menu has its own while loop and switch case for handling the user input.
 while (continueRunning)
 {
-    Extra.MainMenu(active_user?.Email ?? "No user logged in");
-
+    // call for the main menu from the Extra class, passing the email of the active user or a default message if no user is logged in.  
+    // I am using the null conditional operator and the null coalescing operator for this. 
+    // It is a concise way to handle null values as an if statement. 
+    // if we have value from active_user.Email it will be used otherwise the default message will be used.
+    Extra.MainMenu(active_user.Email ?? "No user logged in");
+    // int the switch case the user will enter the input for the main menu.
+    // for the switch there is five cases.
     switch (Console.ReadLine() ?? "")
     {
+        // The first case is for log in and log out.
         case "1":
+            // here we have another bool  for keeping the login menu running.
             bool loginRunning = true;
+            // and the while loop that keeps it running until the loginRunning will be false.
             while (loginRunning)
             {
+                // call for the login menu from the Extra class.
                 Extra.AddLogin();
+                // Here is another switch case for the login menu. and the user will enter the input for the login menu.
+                // There is three cases. The first one is for log in a user. 
+                // The second one is for log out a user. An the third one is for going back to the main menu.
                 switch (Console.ReadLine() ?? "")
                 {
                     case "1":
@@ -66,30 +107,55 @@ while (continueRunning)
                         string? inputUsername = Console.ReadLine();
                         Console.Write("Enter password: ");
                         string? inputPassword = Console.ReadLine();
-                        User? foundUser = users.Find(user => user.TryLogin(inputUsername ?? "", inputPassword ?? ""));
-                        if (foundUser != null)
+                        // We do a check in the users list to see if the user exists.
+                        // If the user exists we set the active_user to the found user.
+                        // and to handle the case that the user is not adding something we use the null coalescing operator.
+                        // Ff the user is not found we display a message to the user also. 
+                        // while are using find for the users list to find the user. 
+                        // Inside the find we are using a lambda expression to check if the user exists with the TryLogin method from the User class.
+                        // It will loop through the entire list until it finds a match or returns null if no match is found.
+                        // It will only return true if the username and password matches in the TryLogin method.
+                        // we also use the null conditional operator to check if the active_user is null or not.
+                        // If the foundUser is null we display a message to the user that the login failed.
+                        // And if it is not null we display a message that the login was successful.    
+                        // and set the active_user to the found user.
+                        User loggedInUser = users.Find(user => user.TryLogin(inputUsername ?? "", inputPassword ?? ""));
+                        if (loggedInUser != null)
                         {
-                            active_user = foundUser;
+                            active_user = loggedInUser;
+                            // ive desided to exit the login menu after a successful login.
                             loginRunning = false;
+                            // if have created two methods in the Extra class for displaying success and alert messages.
                             Extra.DisplaySuccesText("Login successful.");
                         }
                         else
                         {
+                            // here is one for the alert messages function. The diffrence is the color of the text.
                             Extra.DisplayAlertText("Login failed. Incorrect username or password.");
                         }
+                        // There is two ways to handle a pause in the program.
+                        // one is to use Console.ReadLine() and the other one is to use Thread.Sleep(milliseconds).
+                        // I have choosen to use Thread.Sleep for this program.
+                        // There is a reason for this. Because there is nothing special for the user to interact with.
                         Thread.Sleep(3000);
                         break;
                     case "2":
+                        // For log out we do a check to see if there is an active user.
+                        // if there is we set the active_user to null and display a message that the user has been logged out.
+                        // if there is no active user we display a message that no user is logged in.
                         if (active_user != null)
                         {
+                            // if there is an active user we log out the user by setting the active_user to null.
                             active_user = null;
                             Extra.DisplaySuccesText("Logged out successfully.");
                             Thread.Sleep(3000);
                         }
                         else
                         {
+                            // if there is no active user we display a message that no user is logged in.
                             Extra.DisplayAlertText("No user is currently logged in.");
                             Thread.Sleep(3000);
+                            // and i exit this loop and go up one step in the menu 
                             loginRunning = false;
                             break;
                         }
@@ -98,10 +164,18 @@ while (continueRunning)
             }
             break;
         case "2":
+            // in the second case for the first loop i am handling the accounts. 
+            // here we have another bool variable for the while loop. 
             bool accountRunning = true;
+            // The while loop will continoue until the accountRunning will be false
             while (accountRunning)
             {
+                // Here i call the Accountmenu from the Class Extra. 
                 Extra.Accountmenu();
+                // while have another switch that the user will enter the input from the menu above.
+                // there will be three cases for the switch. Only two of them are operational. 
+                // Dont know if i will create a removal of account. perhaps its own account in that case. 
+                // So the first case is for creating a new account. The third one is for going up a step in the menu.   
                 switch (Console.ReadLine() ?? "")
                 {
                     case "1":
@@ -121,6 +195,9 @@ while (continueRunning)
             }
             break;
         case "3":
+            // The third case for the main menu is the handling of the items. 
+            // first there is a check if there is an active user.
+            // if not then there will be a alert text that there is no one logged in
             if (active_user == null)
             {
                 Extra.DisplayAlertText("No user is currently logged in.");
@@ -129,12 +206,13 @@ while (continueRunning)
             }
             else
             {
+                // if there is a user logged in we set a boolena variable to true. 
                 bool itemRunning = true;
-
+                // we use that for the while loop so it will continue until the user execute a stop for it. 
                 while (itemRunning)
                 {
-
-                    Extra.itemMenu("Item");
+                    // Here we call on the itemMenu from the Extra class 
+                    Extra.itemMenu();
                     switch (Console.ReadLine() ?? "")
                     {
                         case "1":

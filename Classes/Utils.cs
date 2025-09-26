@@ -33,7 +33,7 @@ class Extra
         return users.Count > 0;
     }
 
-    public static void MainMenu(string username = "No user logged in")
+    public static void MainMenu(string username)
     {
         string userStatus = string.IsNullOrEmpty(username) ? "No user logged in" : username;
 
@@ -41,21 +41,6 @@ class Extra
         Console.WriteLine();
         Console.WriteLine();
         Console.ForegroundColor = ConsoleColor.Green;
-        // Console.WriteLine(" ╔════════════════════════════════╗");
-        // Console.WriteLine(" ║    --  Trading System  --      ║");
-        // Console.WriteLine(" ║        Choose a number         ║");
-        // Console.WriteLine($" ║    User  {username}           ║");
-        // Console.WriteLine(" ╠════════════════════════════════╣");
-        // Console.WriteLine(" ║        1. (Login)              ║");
-        // Console.WriteLine(" ║        2. (Account)            ║");
-        // Console.WriteLine(" ║        3. (Item)               ║");
-        // Console.WriteLine(" ║        4. (Trade)              ║");
-        // // Console.WriteLine("║     4. (Create item)           ║");
-        // // Console.WriteLine("║     5. (Show Your item)        ║");
-        // // Console.WriteLine("║     6. (Show others items)     ║");
-        // Console.WriteLine(" ║        7. (Exit)               ║");
-        // Console.WriteLine(" ╚════════════════════════════════╝");
-        // set the width of the box based on the length of the username
         Console.WriteLine("  ╔════════════════════════════════╗");
         Console.WriteLine("  ║    --  Trading System  --      ║");
         Console.WriteLine("  ║        Choose a number         ║");
@@ -109,7 +94,7 @@ class Extra
     }
 
 
-    public static void itemMenu(string text)
+    public static void itemMenu()
     {
         Console.WriteLine();
         Console.WriteLine();

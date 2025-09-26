@@ -1,7 +1,22 @@
+// if am creating a namespace called TradingSystem.
 namespace TradingSystem;
-
+// I have create a class that i have called User. It is for handling the users in the system.
+// The class is public so it can be accessed from other classes. 
 class User
 {
+
+    /* There is three properties in this class.
+     Email, password and a list of items.
+     I have also create a constructor that takes in two parameters.
+     I have created six methods in this class. They are:
+     AddItem, displayMessage, FindItem, RemoveItem, ShowItems and TryLogin
+     # AddItem takes in an item and adds it to the list of items.
+     # displayMessage shows all the messages the user has received.
+     # FindItem takes in a string and returns an item if it finds one with the same name as the string.
+     # RemoveItem takes in an item and removes it from the list of items. 
+     # ShowItems shows all the items the user has.
+     # TryLogin takes in a username and password and returns true if they match the users email and password.
+    */
     public string Email;
     string _password;
     List<Item> Items = new List<Item>();
