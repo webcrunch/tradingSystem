@@ -28,16 +28,24 @@ class User
         else
         {
             Console.WriteLine("Your messages:");
-            foreach (var msg in message)
+            for (int i = 0; i < message.Count; i++)
             {
-                Console.WriteLine($"- {msg}");
+                Console.WriteLine($"{i + 1}. {message[i]}");
             }
-            message.Clear(); // Clear messages after displaying
+
+            message.Clear();
         }
     }
     public Item? FindItem(string itemName)
     {
         return Items.Find(item => item.Name.Equals(itemName, StringComparison.OrdinalIgnoreCase));
+    }
+
+
+    public void RemoveItem(Item itemToRemove)
+    {
+        // Använd Remove för att ta bort den specifika referensen till objektet
+        Items.Remove(itemToRemove);
     }
 
 
