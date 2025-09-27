@@ -102,11 +102,17 @@ class Menu
     }
     public static void TradeOptionsMenu()
     {
-        Console.WriteLine("\n--- Trade Options ---");
-        Console.WriteLine("1. Accept Trade");
-        Console.WriteLine("2. Deny Trade");
-        Console.WriteLine("---------------------\n");
 
+Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine(" ╔═════════════════════════╗ ");
+        Console.WriteLine(" ║  --- Trade Options ---  ║ ");
+        Console.WriteLine(" ╠═════════════════════════╣ ");
+        Console.WriteLine(" ║ 1. Accept Trade         ║ ");
+        Console.WriteLine(" ║ 2. Deny Trade           ║ ");
+        Console.WriteLine(" ║ 3. Do nothing           ║ ");
+        Console.WriteLine(" ╚═════════════════════════╝ ");
+        Console.ResetColor(); // Återställer textfärgen
+        Console.WriteLine("\n");
     }
     public static void AddLoginMenu()
     {

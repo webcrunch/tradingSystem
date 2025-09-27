@@ -2,7 +2,8 @@
 // A user needs to be able to register an account  ---- klart
 // A user needs to be able to log out. ----- Klart
 // A user needs to be able to log in. ----- Klart
-// A user needs to be able to upload information about the item they wish to trade. ---- Klart
+// A user needs to be able to upload information about the item 
+// they wish to trade. ---- Klart
 
 
 // A user needs to be able to browse a list of other users items. ---- Klart
@@ -464,6 +465,8 @@ while (continueRunning)
                                                 case 2:
                                                     selectedTrade.DenyTrade();
                                                     Display.DisplaySuccesText("Trade denied.");
+                                                    break;
+                                                case 3:
                                                     break;
                                                 default:
                                                     Display.DisplayAlertText("Invalid action choice.");
