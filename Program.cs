@@ -81,7 +81,6 @@ active_user.AddItem(new Item("Make Your Time Watch", "Ett armbandsur ställt på
 active_user.AddItem(new Item("Someone Else's Ship", "Ett rymdskepp som ingen minns vems det är.Ett bra bytesobjekt")); // Items for testing
 active_user = null; // Log out the test user
 
-
 // _______ end of dummy data for testing purposes _________
 
 // i have decided to create a class named Menu for handling the menu system.
@@ -114,89 +113,101 @@ while (continueRunning)
     {
         // The first case is for log in and log out.
         case 1:
-            // here we have another bool  for keeping the login menu running.
-            bool loginRunning = true;
-            // and the while loop that keeps it running until the loginRunning will be false.
-            while (loginRunning)
+            // Need to check if there is no users at all 
+            if (Extra.UserExisting(users))
             {
-                // call for the login menu from the Extra class.
-                Menu.AddLoginMenu();
-                // Here is another switch case for the login menu. and the user will enter the input for the login menu.
-                // There is three cases. The first one is for log in a user. 
-                // The second one is for log out a user. An the third one is for going back to the main menu.
-
-                switch (Extra.GetIntegerInput(""))
+                // here we have another bool  for keeping the login menu running.
+                bool loginRunning = true;
+                // and the while loop that keeps it running until the loginRunning will be false.
+                while (loginRunning)
                 {
-                    case 1:
-                        // Check if the user is already logged in. 
-                        // Then there will be no access here until loged out
-                        if (active_user != null)
-                        {
-                            Display.DisplayAlertText("You are already logged in");
-                        }
-                        else
-                        {
-                            Console.Write("Enter username: ");
-                            string? inputUsername = Console.ReadLine();
-                            Console.Write("Enter password: ");
-                            string? inputPassword = Console.ReadLine();
-                            // We do a check in the users list to see if the user exists.
-                            // If the user exists we set the active_user to the found user.
-                            // and to handle the case that the user is not adding something we use the null coalescing operator.
-                            // If the user is not found we display a message to the user also. 
-                            // while are using find for the users list to find the user. 
-                            // Inside the find we are using a lambda expression to check if the user exists with the TryLogin method from the User class.
-                            // It will loop through the entire list until it finds a match or returns null if no match is found.
-                            // It will only return true if the username and password matches in the TryLogin method.
-                            // we also use the null conditional operator to check if the active_user is null or not.
-                            // If the foundUser is null we display a message to the user that the login failed.
-                            // And if it is not null we display a message that the login was successful.    
-                            // and set the active_user to the found user.
-                            User loggedInUser = users.Find(user => user.TryLogin(inputUsername ?? "", inputPassword ?? ""));
-                            if (loggedInUser != null)
+                    // call for the login menu from the Extra class.
+                    Menu.AddLoginMenu();
+                    // Here is another switch case for the login menu. and the user will enter the input for the login menu.
+                    // There is three cases. The first one is for log in a user. 
+                    // The second one is for log out a user. An the third one is for going back to the main menu.
+
+                    switch (Extra.GetIntegerInput(""))
+                    {
+                        case 1:
+                            // Check if the user is already logged in. 
+                            // Then there will be no access here until loged out
+                            if (active_user != null)
                             {
-                                active_user = loggedInUser;
-                                // ive desided to exit the login menu after a successful login.
-                                loginRunning = false;
-                                // if have created two methods in the Extra class for displaying success and alert messages.
-                                Display.DisplaySuccesText("Login successful.");
+                                Display.DisplayAlertText("You are already logged in");
                             }
                             else
                             {
-                                // here is one for the alert messages function. The diffrence is the color of the text.
-                                Display.DisplayAlertText("Login failed. Incorrect username or password.");
+                                Console.Write("Enter username: ");
+                                string? inputUsername = Console.ReadLine();
+                                Console.Write("Enter password: ");
+                                string? inputPassword = Console.ReadLine();
+                                // We do a check in the users list to see if the user exists.
+                                // If the user exists we set the active_user to the found user.
+                                // and to handle the case that the user is not adding something we use the null coalescing operator.
+                                // If the user is not found we display a message to the user also. 
+                                // while are using find for the users list to find the user. 
+                                // Inside the find we are using a lambda expression to check if the user exists with the TryLogin method from the User class.
+                                // It will loop through the entire list until it finds a match or returns null if no match is found.
+                                // It will only return true if the username and password matches in the TryLogin method.
+                                // we also use the null conditional operator to check if the active_user is null or not.
+                                // If the foundUser is null we display a message to the user that the login failed.
+                                // And if it is not null we display a message that the login was successful.    
+                                // and set the active_user to the found user.
+                                User? loggedInUser = users.Find(user =>
+                                    (inputUsername != null && inputPassword != null) &&
+                                    user.TryLogin(inputUsername, inputPassword) == true
+                                );
+                                if (loggedInUser != null)
+                                {
+                                    active_user = loggedInUser;
+                                    // ive desided to exit the login menu after a successful login.
+                                    loginRunning = false;
+                                    // if have created two methods in the Extra class for displaying success and alert messages.
+                                    Display.DisplaySuccesText("Login successful.");
+                                }
+                                else
+                                {
+                                    // here is one for the alert messages function. The diffrence is the color of the text.
+                                    Display.DisplayAlertText("Login failed. Incorrect username or password.");
+                                }
+                                // Using a externa function to "pause" and wait for a key press from the user to continue  
+                                Extra.WaitForInput();
+                                break;
                             }
-                            // Using a externa function to "pause" and wait for a key press from the user to continue  
-                            Extra.WaitForInput();
                             break;
-                        }
-                        break;
-                    case 2:
-                        // For log out we do a check to see if there is an active user.
-                        // if there is we set the active_user to null and display a message that the user has been logged out.
-                        // if there is no active user we display a message that no user is logged in.
-                        if (active_user != null)
-                        {
-                            // if there is an active user we log out the user by setting the active_user to null.
-                            active_user = null;
-                            Display.DisplaySuccesText("Logged out successfully.");
-                            Extra.WaitForInput();
-                        }
-                        else
-                        {
+                        case 2:
+                            // For log out we do a check to see if there is an active user.
+                            // if there is we set the active_user to null and display a message that the user has been logged out.
                             // if there is no active user we display a message that no user is logged in.
-                            Display.DisplayAlertText("No user is currently logged in.");
-                            Extra.WaitForInput();
-                            // and i exit this loop and go up one step in the menu 
+                            if (active_user != null)
+                            {
+                                // if there is an active user we log out the user by setting the active_user to null.
+                                active_user = null;
+                                Display.DisplaySuccesText("Logged out successfully.");
+                                Extra.WaitForInput();
+                            }
+                            else
+                            {
+                                // if there is no active user we display a message that no user is logged in.
+                                Display.DisplayAlertText("No user is currently logged in.");
+                                Extra.WaitForInput();
+                                // and i exit this loop and go up one step in the menu 
+                                loginRunning = false;
+                                break;
+                            }
+                            break;
+                        case 3:
                             loginRunning = false;
                             break;
-                        }
-                        break;
-                    case 3:
-                        loginRunning = false;
-                        break;
 
+                    }
                 }
+            }
+            else
+            {
+                Display.DisplayAlertText("There is no account accible for the moment. \n Create new account to login");
+                Extra.WaitForInput();
             }
             break;
         case 2:
