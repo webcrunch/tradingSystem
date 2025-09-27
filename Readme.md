@@ -71,7 +71,7 @@ Read from File (JSON): Implement the function within the FileHandler class to lo
 1. **Requirements**:
    - [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0) or later
    - Windows, Linux, or macOS
-   - cline the project. 
+   - Clone the project: git clone git@github.com:webcrunch/tradingSystem.git
 
 2. **Build and Run**:
    - Open a terminal in the project root directory.
