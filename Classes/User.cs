@@ -64,8 +64,7 @@ class User
     {
         // Använd Remove för att ta bort den specifika referensen till objektet
         // using the Remove function in lists. And remove the current item
-        // not using it anywhere but it is there if we need it. 
-        // And yes i know that some people say that we dont build for the future ;)
+        // We are using it when it is an accepted trade. We do a remove and add for each item. 
         Items.Remove(itemToRemove);
     }
 
