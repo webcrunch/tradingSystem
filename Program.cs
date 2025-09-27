@@ -67,7 +67,6 @@ active_user = null; // Log out the test user
 // it is mostly for displaying the menus and some helper functions. 
 // And to try to keep the Program.cs file clean.
 
-
 // to keep a live loop of the program until the user decides to exit.
 // I have choosen to build the logic for the menu system with two layers. 
 // Login - Account - Item - Trade - Exit
@@ -89,7 +88,8 @@ while (continueRunning)
     Extra.MainMenu(active_user?.Email ?? "No user logged in");
     // int the switch case the user will enter the input for the main menu.
     // for the switch there is five cases.
-    switch (Console.ReadLine() ?? "")
+    string userInputmenu = Extra.GetRequiredInput("");
+    switch (userInputmenu)
     {
         // The first case is for log in and log out.
         case "1":
@@ -103,7 +103,8 @@ while (continueRunning)
                 // Here is another switch case for the login menu. and the user will enter the input for the login menu.
                 // There is three cases. The first one is for log in a user. 
                 // The second one is for log out a user. An the third one is for going back to the main menu.
-                switch (Console.ReadLine() ?? "")
+                string userInputLogin = Extra.GetRequiredInput("");
+                switch (userInputLogin)
                 {
                     case "1":
                         Console.Write("Enter username: ");
@@ -183,11 +184,9 @@ while (continueRunning)
                 {
                     case "1":
                         Console.WriteLine("Create account selected.");
-                        Console.Write("Enter username for the account: ");
-                        string? CreateInputUsername = Console.ReadLine();
-                        Console.Write("Enter password for the account: ");
-                        string? CreateInputPassword = Console.ReadLine();
-                        users.Add(new User(CreateInputUsername ?? "", CreateInputPassword ?? ""));
+                        string CreateInputUsername = Extra.GetRequiredInput("Enter username for the account: ");
+                        string CreateInputPassword = Extra.GetRequiredInput("Enter username for the account: ");
+                        users.Add(new User(CreateInputUsername, CreateInputPassword));
                         Extra.DisplaySuccesText("Account created successfully.");
                         Thread.Sleep(3000);
                         break;
@@ -220,37 +219,17 @@ while (continueRunning)
                     // There is four cases that handles 
                     // added item, showing your own items
                     // showing all other users items and the last one is going up to the main menu.
-                    switch (Console.ReadLine() ?? "")
+                    string userInputItem = Extra.GetRequiredInput("");
+                    switch (userInputItem)
                     {
                         case "1":
                             // the first case is handling the adding a new item. 
                             // from what the construction of a new item it need the name and 
                             // the description for the new item. 
                             Console.WriteLine("Adding new item selected.");
-                            // We are asking the user to enter a name they want to give the item. 
-                            Console.Write("Enter item name: ");
-                            string itemName = "";
-                            // to check so the user is going to enter a value to the name of Item, 
-                            // i am using a while loop that is checking 
-                            // if the value of the string,aka the ItemName, 
-                            // is null or only white space. 
-                            // Default it will be true becase we set it to empthy string above.
-                            while (string.IsNullOrWhiteSpace(itemName))
-                            {
-                                // writing on the screen.
-                                Console.WriteLine("Enter item name:");
-                                // user is giving a input back and save it to the value itemName
-                                // If the user press enter it will be a empthy string
-                                itemName = Console.ReadLine() ?? "";
-
-                                // Here we check if the itemName is still empthy 
-                                // and in that case we will print a message to the user.  
-                                if (string.IsNullOrWhiteSpace(itemName))
-                                {
-                                    Extra.DisplayAlertText("You need to give a name to the item.");
-
-                                }
-                            }
+                            // We are asking the user to enter a name they want to give the item.
+                            // The function handle the check so the user cant set the name empthy 
+                            string itemName = Extra.GetRequiredInput("Enter item name: ");
 
                             // I am thinking that we dont need to do the same check for 
                             // description. We let the user choose if they want that empthy,
@@ -270,6 +249,7 @@ while (continueRunning)
                             active_user.ShowItems();
                             break;
                         case "3":
+                            // The thrid case is handling the display of all the 
                             Console.WriteLine("Showing all others items:");
                             foreach (User user in users)
                             {
@@ -287,8 +267,11 @@ while (continueRunning)
         case "4":
             if (active_user == null)
             {
+                // If there is no user logged in there will be a message 
+                // and then the user needs to press a key to move further. 
                 Extra.DisplayAlertText("No user is currently logged in.");
-                Thread.Sleep(3000);
+                Extra.WaitForInput();
+
                 break;
             }
             else
@@ -297,69 +280,96 @@ while (continueRunning)
                 while (tradeRunning)
                 {
                     Extra.Trademenu();
-                    switch (Console.ReadLine() ?? "")
+                    string CaseHandling = Extra.GetRequiredInput("");
+                    switch (CaseHandling)
                     {
                         case "1":
-                            Console.WriteLine("Request trade selected.");
-                            Extra.Displayusers(users, active_user);
-                            Console.WriteLine("Select a user to trade with:");
-                            if (int.TryParse(Console.ReadLine(), out int userIndex) && userIndex > 0 && userIndex <= users.Count && users[userIndex - 1] != active_user)
-                            {
-                                User receiver = users[userIndex - 1];
-                                Console.WriteLine("");
-                                Console.WriteLine($"Selected user: {receiver.Email}");
-                                Console.WriteLine("");
-                                Console.WriteLine("Select an item to trade from your items:");
-                                active_user.ShowItems();
-                                Console.Write("Enter the name of the item you want to trade: ");
-                                Item? itemToTrade = active_user.FindItem(Console.ReadLine() ?? "");
-                                if (itemToTrade == null)
-                                {
-                                    Extra.DisplayAlertText("Item not found in your items.");
-                                    Thread.Sleep(3000);
-                                    break;
-                                }
-                                Console.WriteLine("Select an item to receive from the other user's items:");
-                                receiver.ShowItems();
-                                Console.Write("Enter the name of the item you want to receive: ");
-                                Item? itemToRecive = receiver.FindItem(Console.ReadLine() ?? "");
-                                if (itemToRecive == null)
-                                {
-                                    Extra.DisplayAlertText("Item not found in the other user's items.");
-                                    Thread.Sleep(3000);
-                                    break;
-                                }
-                                Item[] newTradedItems = new Item[2];
-                                newTradedItems[0] = itemToTrade;
-                                newTradedItems[1] = itemToRecive;
+                            Console.WriteLine("Request trade selected");
+                            // we are calling the function that display all the users in the application exept for the 
+                            // user that is logged in.
+                            // We are sending all the users and to verifie we are not adding the 
+                            // active user to the list we add that too.
+                            Extra.DisplayUsers(users, active_user);
 
-                                trades.Add(new Trade(active_user, receiver, newTradedItems));
-                                string senderMessage = $"You have sent a trade request to {receiver.Email} for item {itemToRecive.Name}.";
-                                string receiverMessage = $"{active_user.Email} has requested to trade their item {itemToTrade.Name} for your item {itemToRecive.Name}.";
-                                active_user.message.Add(senderMessage);
-                                receiver.message.Add(receiverMessage);
-                                Extra.DisplaySuccesText("Trade request sent successfully.");
+                            // getting the index for the user that we want to interact with. 
+                            // There is a function that handles all the check of input from the user.
+                            // It will be less repeteive. DRY (Dont repeat yourself) principle.
+                            // So when the validation is tru the input will be saved to the userIndex variable. 
+                            int userIndex = Extra.GetIntegerInput("Select a user to trade with (enter a number)");
+
+                            //  Here we check if the user has added the index of itself. 
+                            // First we check if the userIndex is bigger than zero. So no negative numbers.
+                            // Or is inside the amount of users in the list.  
+                            if (userIndex > 0 && userIndex <= users.Count)
+                            {
+                                // here we save the reciving to a variable because we are going to work with it later.
+                                // because we are displaying numbers starting with 1 we need to subtract by 1 to get the right index.
+                                User receiver = users[userIndex - 1];
+                                // check so that the reciving part is not the same as the logged in part.
+                                if (receiver != active_user)
+                                {
+                                    // Choose the item that the user wants to trade
+                                    Console.WriteLine($"Selected user: {receiver.Email}");
+                                    Console.WriteLine("Select a item to trade from your items");
+                                    active_user.ShowItems();
+
+                                    // string itemToTradeName = Extra.GetRequiredInput("Enter the name of the item you want to trade:");
+                                    // let the user choose a name of item. After that is sent to the function that search if the item is in the users list. 
+                                    // It could be returned null if there is no found. Thats why we set Item as nullable.
+                                    Item? itemToTrade = active_user.FindItem(Extra.GetRequiredInput("Enter the name of the item you want to trade:"));
+
+                                    if (itemToTrade == null)
+                                    {
+                                        Extra.DisplayAlertText("Item not found in your items.");
+                                        Extra.WaitForInput();
+                                        return;
+                                    }
+                                    Console.WriteLine("\n Select a item to recive from the other\\´s users items:");
+                                    receiver.ShowItems();
+
+                                    // string itemToRecivieName = Extra.GetRequiredInput("Enter the name of the item you want to receive: ");
+                                    Item? itemToRecive = receiver.FindItem(Extra.GetRequiredInput("Enter the name of the item you want to receive: "));
+
+                                    Item[] newtradedItems = new Item[] { itemToTrade, itemToRecive };
+
+                                    trades.Add(new Trade(active_user, receiver, newtradedItems));
+                                    string senderMessage = $"You have sent a trade request to {receiver.Email} for item {itemToRecive.Name}.";
+                                    string receiverMessage = $"{active_user.Email} has requested to trade their item {itemToTrade.Name} for your item {itemToRecive.Name}.";
+
+                                    active_user.message.Add(senderMessage);
+                                    receiver.message.Add(receiverMessage);
+
+                                    Extra.DisplaySuccesText("Trade request sent succefully");
+                                }
+                                else
+                                {
+                                    Extra.DisplayAlertText("You cannot trade with yourself.");
+
+                                }
                             }
                             else
                             {
                                 Extra.DisplayAlertText("Invalid user selection.");
                             }
-                            Thread.Sleep(3000);
+                            Extra.WaitForInput();
                             break;
                         case "2":
                             active_user.displayMessage();
-                            Thread.Sleep(3000);
+                            Extra.WaitForInput();
+
                             break;
                         case "3":
                             Extra.ShowMenyTradeHandling();
-                            switch (Console.ReadLine() ?? "")
+                            string UserInputTradeHandling = Extra.GetRequiredInput("");
+                            switch (UserInputTradeHandling)
                             {
                                 case "1":
                                     List<Trade> sentTrades = trades.Where(t => t.Sender == active_user && t.Status != TradeStatus.Canceled).ToList();
                                     if (sentTrades.Count == 0)
                                     {
                                         Extra.DisplayAlertText("No sent trade requests.");
-                                        Thread.Sleep(3000);
+                                        Extra.WaitForInput();
+
                                         break;
                                     }
                                     else
@@ -370,10 +380,10 @@ while (continueRunning)
                                             Trade trade = sentTrades[i];
                                             Console.WriteLine($"{i + 1}. Status: {trade.Status} | To: {trade.Receiver.Email} | You offer: {trade.ItemTraded[0].Name} | You want: {trade.ItemTraded[1].Name}");
                                         }
-                                        Thread.Sleep(3000);
+                                        Extra.WaitForInput();
+
                                     }
-                                    Console.WriteLine("Do you want to cancel a sent trade request? (y/n)");
-                                    string? cancelChoice = Console.ReadLine();
+                                    string cancelChoice = Extra.GetRequiredInput("Do you want to cancel a sent trade request? (y/n)");
                                     if (cancelChoice?.ToLower() == "y")
                                     {
                                         Console.Write("Enter the number of the trade to cancel: ");
@@ -398,7 +408,8 @@ while (continueRunning)
                                         {
                                             Extra.DisplayAlertText("Invalid trade selection.");
                                         }
-                                        Thread.Sleep(3000);
+                                        Extra.WaitForInput();
+
                                     }
                                     break;
                                 case "2":
@@ -408,7 +419,8 @@ while (continueRunning)
                                     if (recivedTrades.Count == 0)
                                     {
                                         Extra.DisplayAlertText("No pending trade requests.");
-                                        Thread.Sleep(3000);
+                                        Extra.WaitForInput();
+
                                     }
                                     else
                                     {
@@ -454,7 +466,7 @@ while (continueRunning)
                                     if (acceptedTrades.Count == 0)
                                     {
                                         Extra.DisplayAlertText("No accepted trade requests.");
-                                        Thread.Sleep(3000);
+                                        Extra.WaitForInput();
                                         break;
                                     }
                                     else
@@ -465,7 +477,8 @@ while (continueRunning)
                                             Trade trade = acceptedTrades[i];
                                             Console.WriteLine($"{i + 1}. Status: {trade.Status} | With: {(trade.Sender == active_user ? trade.Receiver.Email : trade.Sender.Email)} | You offered: {trade.ItemTraded[0].Name} | You received: {trade.ItemTraded[1].Name}");
                                         }
-                                        Thread.Sleep(3000);
+                                        Extra.WaitForInput();
+
                                     }
                                     break;
                                 case "4":
@@ -473,7 +486,7 @@ while (continueRunning)
                                     if (deniedTrades.Count == 0)
                                     {
                                         Extra.DisplayAlertText("No denied trade requests.");
-                                        Thread.Sleep(3000);
+                                        Extra.WaitForInput();
                                         break;
                                     }
                                     else
