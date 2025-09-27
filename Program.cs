@@ -1,28 +1,28 @@
 ﻿// Todos for the trading system:
-// A user needs to be able to register an account  ---- klart
-// A user needs to be able to log out. ----- Klart
-// A user needs to be able to log in. ----- Klart
-// A user needs to be able to upload information about the item 
-// they wish to trade. ---- Klart
+// TODO: A user needs to be able to register an account  ---- finished
+// TODO: A user needs to be able to log out. ----- finished
+// TODO: A user needs to be able to log in. ----- finished
+// TODO: A user needs to be able to upload information about the item 
+// TODO: they wish to trade. ---- finished
 
+// TODO: A user needs to be able to browse a list of other users items. ---- finished
 
-// A user needs to be able to browse a list of other users items. ---- Klart
+// TODO: Refactor the need above . ---- finished 
+// TODO: A user needs to be able to request a trade for other users items. ---- finished
+// TODO: A user needs to be able to see a list of their sent trade requests. ---- finished
+// TODO: A user needs to be able to cancel a sent trade request. ---- finished
 
-// Refactor the need above . ---- Klart 
-// A user needs to be able to request a trade for other users items. ---- Klart
-// A user needs to be able to see a list of their sent trade requests. ---- Klart
-// A user needs to be able to cancel a sent trade request. ---- Klart
+// TODO: A user needs to be able to browse trade requests. --- finished
 
+// TODO: A user needs to be able to accept a trade request. --- finished
+// TODO: A user needs to be able to deny a trade request. --- finished
 
-// A user needs to be able to browse trade requests. --- Klart
+// TODO: A user needs to be able to browse completed requests. --- finished
 
-// A user needs to be able to accept a trade request. --- Klart
-// A user needs to be able to deny a trade request. --- Klart
-
-// A user needs to be able to browse completed requests. --- Klart
-
-/// only accept/deny the user is the recepter. ---- Klart
-/// only cancel the user if the sender. ---- Klart
+// TODO: only accept/deny the user is the recepter. ---- finished
+// TODO: only cancel the user if the sender. ---- finished
+// TODO: save to file json WIP
+// TODO: Read from json file and init data WIP
 using System.Text.Json; // För att hantera JSON
 using System.IO;         // För att hantera filer
 

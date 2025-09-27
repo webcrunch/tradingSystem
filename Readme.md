@@ -35,6 +35,8 @@ The following requirements have been implemented and validated:
 
   - Browse a list of other users' items.✅
 
+  - Browse a list of active users items.✅
+
 - Trade Requests & Handling:
 
   - Request a trade for another user's item.✅
