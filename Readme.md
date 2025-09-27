@@ -48,16 +48,22 @@ If a file is missing, the program starts with an empty list instead of crashing.
 The following points detail the key design decisions made during the development, adhering to good Object-Oriented Programming (OOP) principles.
 
 1. Separation of Concerns (SRP)
-We chose to strictly separate logic into distinct files based on responsibility:
+I have chose to strictly separate logic into distinct files based on responsibility:
 
 Program.cs: Handles the high-level application flow (the main loop and the primary switch-statement) and centralizes data management (calling the JSON load/save methods).
 
-Extra.cs (Utility Class): Handles all I/O (Input/Output) and validation. This includes displaying colored alerts, showing menus, and crucial input functions like GetIntegerInput() and GetRequiredInput().
+Extra.cs (Utility Class): handles user input validation (GetIntegerInput, GetRequiredInput)
+
+Menu.cs (Input and Navigation Class) Prints all menus (e.g., MainMenu).
+
+Display.cs (Output and Presentation) Shows color-coded messages (AlertText, SuccessText) and formatted data (lists of users/items).
+
+FileHandler.cs (Data Persistence) Handles JSON serialization/deserialization and all disk I/O operations.
 
 Rationale: This structure adheres to the Single Responsibility Principle (SRP). The main program logic is clean and readable because it delegates all messy input validation and utility tasks to the Extra class.
 
 2. Input Handling Philosophy
-We intentionally avoided mixing input reading (Console.ReadLine()) and complex validation logic in the main application flow.
+I have intentionally avoided mixing input reading (Console.ReadLine()) and complex validation logic in the main application flow.
 
 Custom Input Functions: Functions like Extra.GetIntegerInput() loop internally until the user provides valid data (e.g., a number).
 
