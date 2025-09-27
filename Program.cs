@@ -22,6 +22,8 @@
 
 /// only accept/deny the user is the recepter. ---- Klart
 /// only cancel the user if the sender. ---- Klart
+using System.Text.Json; // För att hantera JSON
+using System.IO;         // För att hantera filer
 
 // I am usign the TradingSystem namespace.
 using TradingSystem;
@@ -62,7 +64,7 @@ active_user.AddItem(new Item("dator", "en macbook pro 2020")); // Items for test
 active_user = null; // Log out the test user
 // _______ end of dummy data for testing purposes _________
 
-// i have decided to create a class named Extra for handling the menu system.
+// i have decided to create a class named Menu for handling the menu system.
 // The class is static because i do not need to create an instance of it.
 // it is mostly for displaying the menus and some helper functions. 
 // And to try to keep the Program.cs file clean.
@@ -85,65 +87,71 @@ while (continueRunning)
     // if we have value from active_user.Email it will be used otherwise the default message will be used.
     // Need to work even if the active_user is nill. Thats why we have activ_user?. 
     // So it could nullable
-    Extra.MainMenu(active_user?.Email ?? "No user logged in");
+    Menu.MainMenu(active_user?.Email ?? "No user logged in");
     // int the switch case the user will enter the input for the main menu.
     // for the switch there is five cases.
-    string userInputmenu = Extra.GetRequiredInput("");
-    switch (userInputmenu)
+    switch (Extra.GetIntegerInput(""))
     {
         // The first case is for log in and log out.
-        case "1":
+        case 1:
             // here we have another bool  for keeping the login menu running.
             bool loginRunning = true;
             // and the while loop that keeps it running until the loginRunning will be false.
             while (loginRunning)
             {
                 // call for the login menu from the Extra class.
-                Extra.AddLogin();
+                Menu.AddLoginMenu();
                 // Here is another switch case for the login menu. and the user will enter the input for the login menu.
                 // There is three cases. The first one is for log in a user. 
                 // The second one is for log out a user. An the third one is for going back to the main menu.
 
-                switch (Extra.GetRequiredInput(""))
+                switch (Extra.GetIntegerInput(""))
                 {
-                    case "1":
-                        Console.Write("Enter username: ");
-                        string? inputUsername = Console.ReadLine();
-                        Console.Write("Enter password: ");
-                        string? inputPassword = Console.ReadLine();
-                        // We do a check in the users list to see if the user exists.
-                        // If the user exists we set the active_user to the found user.
-                        // and to handle the case that the user is not adding something we use the null coalescing operator.
-                        // If the user is not found we display a message to the user also. 
-                        // while are using find for the users list to find the user. 
-                        // Inside the find we are using a lambda expression to check if the user exists with the TryLogin method from the User class.
-                        // It will loop through the entire list until it finds a match or returns null if no match is found.
-                        // It will only return true if the username and password matches in the TryLogin method.
-                        // we also use the null conditional operator to check if the active_user is null or not.
-                        // If the foundUser is null we display a message to the user that the login failed.
-                        // And if it is not null we display a message that the login was successful.    
-                        // and set the active_user to the found user.
-                        User loggedInUser = users.Find(user => user.TryLogin(inputUsername ?? "", inputPassword ?? ""));
-                        if (loggedInUser != null)
+                    case 1:
+                        // Check if the user is already logged in. 
+                        // Then there will be no access here until loged out
+                        if (active_user != null)
                         {
-                            active_user = loggedInUser;
-                            // ive desided to exit the login menu after a successful login.
-                            loginRunning = false;
-                            // if have created two methods in the Extra class for displaying success and alert messages.
-                            Extra.DisplaySuccesText("Login successful.");
+                            Display.DisplayAlertText("You are already logged in");
                         }
                         else
                         {
-                            // here is one for the alert messages function. The diffrence is the color of the text.
-                            Extra.DisplayAlertText("Login failed. Incorrect username or password.");
+                            Console.Write("Enter username: ");
+                            string? inputUsername = Console.ReadLine();
+                            Console.Write("Enter password: ");
+                            string? inputPassword = Console.ReadLine();
+                            // We do a check in the users list to see if the user exists.
+                            // If the user exists we set the active_user to the found user.
+                            // and to handle the case that the user is not adding something we use the null coalescing operator.
+                            // If the user is not found we display a message to the user also. 
+                            // while are using find for the users list to find the user. 
+                            // Inside the find we are using a lambda expression to check if the user exists with the TryLogin method from the User class.
+                            // It will loop through the entire list until it finds a match or returns null if no match is found.
+                            // It will only return true if the username and password matches in the TryLogin method.
+                            // we also use the null conditional operator to check if the active_user is null or not.
+                            // If the foundUser is null we display a message to the user that the login failed.
+                            // And if it is not null we display a message that the login was successful.    
+                            // and set the active_user to the found user.
+                            User loggedInUser = users.Find(user => user.TryLogin(inputUsername ?? "", inputPassword ?? ""));
+                            if (loggedInUser != null)
+                            {
+                                active_user = loggedInUser;
+                                // ive desided to exit the login menu after a successful login.
+                                loginRunning = false;
+                                // if have created two methods in the Extra class for displaying success and alert messages.
+                                Display.DisplaySuccesText("Login successful.");
+                            }
+                            else
+                            {
+                                // here is one for the alert messages function. The diffrence is the color of the text.
+                                Display.DisplayAlertText("Login failed. Incorrect username or password.");
+                            }
+                            // Using a externa function to "pause" and wait for a key press from the user to continue  
+                            Extra.WaitForInput();
+                            break;
                         }
-                        // There is two ways to handle a pause in the program.
-                        // one is to use Console.ReadLine() and the other one is to use Thread.Sleep(milliseconds).
-                        // I have choosen to use Thread.Sleep for this program.
-                        // There is a reason for this. Because there is nothing special for the user to interact with.
-                        Thread.Sleep(3000);
                         break;
-                    case "2":
+                    case 2:
                         // For log out we do a check to see if there is an active user.
                         // if there is we set the active_user to null and display a message that the user has been logged out.
                         // if there is no active user we display a message that no user is logged in.
@@ -151,23 +159,27 @@ while (continueRunning)
                         {
                             // if there is an active user we log out the user by setting the active_user to null.
                             active_user = null;
-                            Extra.DisplaySuccesText("Logged out successfully.");
-                            Thread.Sleep(3000);
+                            Display.DisplaySuccesText("Logged out successfully.");
+                            Extra.WaitForInput();
                         }
                         else
                         {
                             // if there is no active user we display a message that no user is logged in.
-                            Extra.DisplayAlertText("No user is currently logged in.");
-                            Thread.Sleep(3000);
+                            Display.DisplayAlertText("No user is currently logged in.");
+                            Extra.WaitForInput();
                             // and i exit this loop and go up one step in the menu 
                             loginRunning = false;
                             break;
                         }
                         break;
+                    case 3:
+                        loginRunning = false;
+                        break;
+
                 }
             }
             break;
-        case "2":
+        case 2:
             // in the second case for the first loop i am handling the accounts. 
             // here we have another bool variable for the while loop. 
             bool accountRunning = true;
@@ -175,7 +187,7 @@ while (continueRunning)
             while (accountRunning)
             {
                 // Here i call the Accountmenu from the Class Extra. 
-                Extra.Accountmenu();
+                Menu.Accountmenu();
                 // while have another switch that the user will enter the input from the menu above.
                 // there will be three cases for the switch. Only two of them are operational. 
                 // Dont know if i will create a removal of account. perhaps its own account in that case. 
@@ -187,8 +199,8 @@ while (continueRunning)
                         string CreateInputUsername = Extra.GetRequiredInput("Enter username for the account: ");
                         string CreateInputPassword = Extra.GetRequiredInput("Enter username for the account: ");
                         users.Add(new User(CreateInputUsername, CreateInputPassword));
-                        Extra.DisplaySuccesText("Account created successfully.");
-                        Thread.Sleep(3000);
+                        Display.DisplaySuccesText("Account created successfully.");
+                        Extra.WaitForInput();
                         break;
                     case 3:
                         accountRunning = false;
@@ -196,14 +208,14 @@ while (continueRunning)
                 }
             }
             break;
-        case "3":
+        case 3:
             // The third case for the main menu is the handling of the items. 
             // first there is a check if there is an active user.
             // if not then there will be a alert text that there is no one logged in
             if (active_user == null)
             {
-                Extra.DisplayAlertText("No user is currently logged in.");
-                Thread.Sleep(3000);
+                Display.DisplayAlertText("No user is currently logged in.");
+                Extra.WaitForInput();
                 break;
             }
             else
@@ -214,15 +226,16 @@ while (continueRunning)
                 while (itemRunning)
                 {
                     // Here we call on the itemMenu from the Extra class 
-                    Extra.itemMenu();
+                    Menu.itemMenu();
                     // The switch is handlign the users input
                     // There is four cases that handles 
                     // added item, showing your own items
                     // showing all other users items and the last one is going up to the main menu.
-                    string userInputItem = Extra.GetRequiredInput("");
-                    switch (userInputItem)
+                    // the getIntegerInput handle verification of numbers and will only continue if user
+                    // inputs a real number. Negative works also. :/
+                    switch (Extra.GetIntegerInput(""))
                     {
-                        case "1":
+                        case 1:
                             // the first case is handling the adding a new item. 
                             // from what the construction of a new item it need the name and 
                             // the description for the new item. 
@@ -237,18 +250,18 @@ while (continueRunning)
                             Console.Write("Enter item description: ");
                             string itemDescription = Console.ReadLine() ?? "";
                             items.Add(new Item(itemName, itemDescription));
-                            Extra.DisplaySuccesText("Item added successfully.");
+                            Display.DisplaySuccesText("Item added successfully.");
                             active_user?.AddItem(new Item(itemName, itemDescription));
-                            Thread.Sleep(3000);
+                            Extra.WaitForInput();
                             break;
-                        case "2":
+                        case 2:
                             // This case is handling the display of the user that is logged in.
                             Console.WriteLine("Your items:");
                             // calling a function from user class to show all the items for the 
                             // user that is logged in aka the user that is added to the active_user.
                             active_user.ShowItems();
                             break;
-                        case "3":
+                        case 3:
                             // The third case is handling the display of all the items that all the other users has created 
                             Console.WriteLine("Showing all others items:");
                             // to find all the users we are looping through the users list with a foreach loop
@@ -256,24 +269,24 @@ while (continueRunning)
                             {
                                 // and when we get to the user that is logged in we skip that user and just continue the loop
                                 if (user == active_user) continue; // Skip the active user's items
-                                // and then we are calling the showItem function for that user and display its items. 
+                                                                   // and then we are calling the showItem function for that user and display its items. 
                                 user.ShowItems();
                             }
                             break;
-                        case "4":
+                        case 4:
                             itemRunning = false;
                             break;
                     }
                 }
             }
             break;
-        case "4":
+        case 4:
 
             if (active_user == null)
             {
                 // If there is no user logged in there will be a message 
                 // and then the user needs to press a key to move further. 
-                Extra.DisplayAlertText("No user is currently logged in.");
+                Display.DisplayAlertText("No user is currently logged in.");
                 Extra.WaitForInput();
 
                 break;
@@ -283,7 +296,7 @@ while (continueRunning)
                 bool tradeRunning = true;
                 while (tradeRunning)
                 {
-                    Extra.Trademenu();
+                    Menu.Trademenu();
                     switch (Extra.GetIntegerInput("Choose an option: "))
                     {
                         case 1:
@@ -292,7 +305,7 @@ while (continueRunning)
                             // user that is logged in.
                             // We are sending all the users and to verifie we are not adding the 
                             // active user to the list we add that too.
-                            Extra.DisplayUsers(users, active_user);
+                            Display.DisplayUsers(users, active_user);
 
                             // getting the index for the user that we want to interact with. 
                             // There is a function that handles all the check of input from the user.
@@ -323,7 +336,7 @@ while (continueRunning)
 
                                     if (itemToTrade == null)
                                     {
-                                        Extra.DisplayAlertText("Item not found in your items.");
+                                        Display.DisplayAlertText("Item not found in your items.");
                                         Extra.WaitForInput();
                                         return;
                                     }
@@ -342,17 +355,17 @@ while (continueRunning)
                                     active_user.message.Add(senderMessage);
                                     receiver.message.Add(receiverMessage);
 
-                                    Extra.DisplaySuccesText("Trade request sent succefully");
+                                    Display.DisplaySuccesText("Trade request sent succefully");
                                 }
                                 else
                                 {
-                                    Extra.DisplayAlertText("You cannot trade with yourself.");
+                                    Display.DisplayAlertText("You cannot trade with yourself.");
 
                                 }
                             }
                             else
                             {
-                                Extra.DisplayAlertText("Invalid user selection.");
+                                Display.DisplayAlertText("Invalid user selection.");
                             }
                             Extra.WaitForInput();
                             break;
@@ -362,14 +375,14 @@ while (continueRunning)
 
                             break;
                         case 3:
-                            Extra.ShowMenyTradeHandling();
+                            Menu.ShowTradeHandlingMenu();
                             switch (Extra.GetIntegerInput("Choose an option: "))
                             {
                                 case 1:
                                     List<Trade> sentTrades = trades.Where(t => t.Sender == active_user && t.Status != TradeStatus.Canceled).ToList();
                                     if (sentTrades.Count == 0)
                                     {
-                                        Extra.DisplayAlertText("No sent trade requests.");
+                                        Display.DisplayAlertText("No sent trade requests.");
                                         Extra.WaitForInput();
 
                                         break;
@@ -386,10 +399,13 @@ while (continueRunning)
 
                                     }
                                     string cancelChoice = Extra.GetRequiredInput("Do you want to cancel a sent trade request? (y/n)");
-                                    if (cancelChoice?.ToLower() == "y")
+                                    if (cancelChoice.ToLower() == "y")
                                     {
-                                        Console.Write("Enter the number of the trade to cancel: ");
-                                        if (int.TryParse(Console.ReadLine(), out int cancelIndex) && cancelIndex > 0 && cancelIndex <= sentTrades.Count)
+
+                                        // handle integer validation from external function and print message to user if anyting wrong. 
+                                        int cancelIndex = Extra.GetIntegerInput("Enter the number of the trade to cancel: ");
+
+                                        if (cancelIndex > 0 && cancelIndex <= sentTrades.Count)
                                         {
                                             Trade tradeToCancel = sentTrades[cancelIndex - 1];
                                             if (tradeToCancel.Status == TradeStatus.Pending)
@@ -399,16 +415,16 @@ while (continueRunning)
                                                 string receiverMessage = $"{active_user.Email} has canceled the trade request.";
                                                 active_user.message.Add(senderMessage);
                                                 tradeToCancel.Receiver.message.Add(receiverMessage);
-                                                Extra.DisplaySuccesText("Trade request canceled.");
+                                                Display.DisplaySuccesText("Trade request canceled.");
                                             }
                                             else
                                             {
-                                                Extra.DisplayAlertText("Only pending trades can be canceled.");
+                                                Display.DisplayAlertText("Only pending trades can be canceled.");
                                             }
                                         }
                                         else
                                         {
-                                            Extra.DisplayAlertText("Invalid trade selection.");
+                                            Display.DisplayAlertText("Invalid trade selection.");
                                         }
                                         Extra.WaitForInput();
 
@@ -420,7 +436,7 @@ while (continueRunning)
 
                                     if (recivedTrades.Count == 0)
                                     {
-                                        Extra.DisplayAlertText("No pending trade requests.");
+                                        Display.DisplayAlertText("No pending trade requests.");
                                         Extra.WaitForInput();
 
                                     }
@@ -437,31 +453,27 @@ while (continueRunning)
                                         if (tradeIndex > 0 && tradeIndex <= recivedTrades.Count)
                                         {
                                             Trade selectedTrade = recivedTrades[tradeIndex - 1];
-                                            Console.WriteLine("\n--- Trade Options ---");
-                                            Console.WriteLine("1. Accept Trade");
-                                            Console.WriteLine("2. Deny Trade");
-                                            Console.WriteLine("---------------------\n");
+                                            Menu.TradeOptionsMenu();
                                             switch (Extra.GetIntegerInput("Choose an option:"))
                                             {
                                                 case 1:
                                                     selectedTrade.AcceptTrade();
-                                                    Extra.DisplaySuccesText("Trade accepted.");
+                                                    Display.DisplaySuccesText("Trade accepted.");
                                                     break;
 
                                                 case 2:
                                                     selectedTrade.DenyTrade();
-                                                    Extra.DisplaySuccesText("Trade denied.");
+                                                    Display.DisplaySuccesText("Trade denied.");
                                                     break;
                                                 default:
-                                                    Extra.DisplayAlertText("Invalid action choice.");
+                                                    Display.DisplayAlertText("Invalid action choice.");
                                                     break;
                                             }
                                         }
                                         else
                                         {
-                                            Extra.DisplayAlertText("Invalid trade selection.");
+                                            Display.DisplayAlertText("Invalid trade selection.");
                                         }
-                                        Console.WriteLine("Press a key to continue..");
                                         Extra.WaitForInput();
                                     }
                                     break;
@@ -469,7 +481,7 @@ while (continueRunning)
                                     List<Trade> acceptedTrades = trades.Where(t => (t.Sender == active_user || t.Receiver == active_user) && t.Status == TradeStatus.Accepted).ToList();
                                     if (acceptedTrades.Count == 0)
                                     {
-                                        Extra.DisplayAlertText("No accepted trade requests.");
+                                        Display.DisplayAlertText("No accepted trade requests.");
                                         Extra.WaitForInput();
                                         break;
                                     }
@@ -481,7 +493,6 @@ while (continueRunning)
                                             Trade trade = acceptedTrades[i];
                                             Console.WriteLine($"{i + 1}. Status: {trade.Status} | With: {(trade.Sender == active_user ? trade.Receiver.Email : trade.Sender.Email)} | You offered: {trade.ItemTraded[0].Name} | You received: {trade.ItemTraded[1].Name}");
                                         }
-                                        Console.WriteLine("Press a key to continue..");
                                         Extra.WaitForInput();
                                     }
                                     break;
@@ -489,7 +500,7 @@ while (continueRunning)
                                     List<Trade> deniedTrades = trades.Where(t => (t.Sender == active_user || t.Receiver == active_user) && t.Status == TradeStatus.Denied).ToList();
                                     if (deniedTrades.Count == 0)
                                     {
-                                        Extra.DisplayAlertText("No denied trade requests.");
+                                        Display.DisplayAlertText("No denied trade requests.");
                                         Extra.WaitForInput();
                                         break;
                                     }
@@ -501,25 +512,24 @@ while (continueRunning)
                                             Trade trade = deniedTrades[i];
                                             Console.WriteLine($"{i + 1}. Status: {trade.Status} | With: {(trade.Sender == active_user ? trade.Receiver.Email : trade.Sender.Email)} | You offered: {trade.ItemTraded[0].Name} | You wanted: {trade.ItemTraded[1].Name}");
                                         }
-                                        Console.WriteLine("Press a key to continue..");
                                         Extra.WaitForInput();
                                     }
                                     break;
                                 case 5:
                                     tradeRunning = false;
-                                    Thread.Sleep(3000);
+                                    Extra.WaitForInput();
                                     break;
                             }
                             break;
                         case 4:
                             tradeRunning = false;
-                            Thread.Sleep(3000);
+                            Extra.WaitForInput();
                             break;
                     }
                 }
                 break;
             }
-        case "7":
+        case 7:
             Console.WriteLine("Exiting...");
             continueRunning = false;
             break;
