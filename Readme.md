@@ -12,6 +12,58 @@ A simple console-based trading system written in C# (.NET 9). This project allow
 - **Data Persistence**: Uses JSON for saving user, users item and trade data between sessions.
 
 
+## ✅ Projektstatus: Trading System
+
+ Completion of  the core business logic and user interaction features! Focusing on implementing robust data persistence.
+
+
+
+##### 🎉  Done (Completed Requirements)
+The following requirements have been implemented and validated:
+
+- User Management:
+
+  - User registration.✅
+
+  - User login.✅
+
+  - User logout.✅
+
+- Item Management:
+
+  - Create items for trade.✅
+
+  - Browse a list of other users' items.✅
+
+- Trade Requests & Handling:
+
+  - Request a trade for another user's item.✅
+
+  - View a list of sent trade requests.✅
+
+ - Cancel a sent trade request (only if the user is the sender).✅
+
+ - Browse received/pending trade requests.✅
+
+ - Accept a trade request (only if the user is the recipient).✅
+
+ - Deny a trade request (only if the user is the recipient).✅
+
+ - Browse completed (accepted/denied) requests. ✅
+
+#### Code Structure:
+
+Refactored and separated the monolithic Extra/Utils class into dedicated, single-responsibility classes (Menu, Display, FileHandler).
+
+#### 🚧 WIP (Work In Progress)
+These two tasks represent the final steps for project completion:
+
+Save to File (JSON): Implement the function within the FileHandler class to save all program data (User and Trade lists) to JSON files upon program exit.
+
+Read from File (JSON): Implement the function within the FileHandler class to load all program data from JSON files upon program startup.
+
+
+
 ## 🚀 How to Run
 
 1. **Requirements**:
