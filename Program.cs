@@ -103,8 +103,8 @@ while (continueRunning)
                 // Here is another switch case for the login menu. and the user will enter the input for the login menu.
                 // There is three cases. The first one is for log in a user. 
                 // The second one is for log out a user. An the third one is for going back to the main menu.
-                string userInputLogin = Extra.GetRequiredInput("");
-                switch (userInputLogin)
+
+                switch (Extra.GetRequiredInput(""))
                 {
                     case "1":
                         Console.Write("Enter username: ");
@@ -180,9 +180,9 @@ while (continueRunning)
                 // there will be three cases for the switch. Only two of them are operational. 
                 // Dont know if i will create a removal of account. perhaps its own account in that case. 
                 // So the first case is for creating a new account. The third one is for going up a step in the menu.   
-                switch (Console.ReadLine() ?? "")
+                switch (Extra.GetIntegerInput(""))
                 {
-                    case "1":
+                    case 1:
                         Console.WriteLine("Create account selected.");
                         string CreateInputUsername = Extra.GetRequiredInput("Enter username for the account: ");
                         string CreateInputPassword = Extra.GetRequiredInput("Enter username for the account: ");
@@ -190,7 +190,7 @@ while (continueRunning)
                         Extra.DisplaySuccesText("Account created successfully.");
                         Thread.Sleep(3000);
                         break;
-                    case "3":
+                    case 3:
                         accountRunning = false;
                         break;
                 }
@@ -249,11 +249,14 @@ while (continueRunning)
                             active_user.ShowItems();
                             break;
                         case "3":
-                            // The thrid case is handling the display of all the 
+                            // The third case is handling the display of all the items that all the other users has created 
                             Console.WriteLine("Showing all others items:");
+                            // to find all the users we are looping through the users list with a foreach loop
                             foreach (User user in users)
                             {
+                                // and when we get to the user that is logged in we skip that user and just continue the loop
                                 if (user == active_user) continue; // Skip the active user's items
+                                // and then we are calling the showItem function for that user and display its items. 
                                 user.ShowItems();
                             }
                             break;
@@ -265,6 +268,7 @@ while (continueRunning)
             }
             break;
         case "4":
+
             if (active_user == null)
             {
                 // If there is no user logged in there will be a message 
@@ -280,10 +284,9 @@ while (continueRunning)
                 while (tradeRunning)
                 {
                     Extra.Trademenu();
-                    string CaseHandling = Extra.GetRequiredInput("");
-                    switch (CaseHandling)
+                    switch (Extra.GetIntegerInput(""))
                     {
-                        case "1":
+                        case 1:
                             Console.WriteLine("Request trade selected");
                             // we are calling the function that display all the users in the application exept for the 
                             // user that is logged in.
@@ -353,17 +356,16 @@ while (continueRunning)
                             }
                             Extra.WaitForInput();
                             break;
-                        case "2":
+                        case 2:
                             active_user.displayMessage();
                             Extra.WaitForInput();
 
                             break;
-                        case "3":
+                        case 3:
                             Extra.ShowMenyTradeHandling();
-                            string UserInputTradeHandling = Extra.GetRequiredInput("");
-                            switch (UserInputTradeHandling)
+                            switch (Extra.GetIntegerInput(""))
                             {
-                                case "1":
+                                case 1:
                                     List<Trade> sentTrades = trades.Where(t => t.Sender == active_user && t.Status != TradeStatus.Canceled).ToList();
                                     if (sentTrades.Count == 0)
                                     {
@@ -412,7 +414,7 @@ while (continueRunning)
 
                                     }
                                     break;
-                                case "2":
+                                case 2:
 
                                     List<Trade> recivedTrades = trades.Where(t => t.Receiver.Email == active_user.Email && t.Status == TradeStatus.Pending).ToList();
 
@@ -463,7 +465,7 @@ while (continueRunning)
                                         Extra.WaitForInput();
                                     }
                                     break;
-                                case "3":
+                                case 3:
                                     List<Trade> acceptedTrades = trades.Where(t => (t.Sender == active_user || t.Receiver == active_user) && t.Status == TradeStatus.Accepted).ToList();
                                     if (acceptedTrades.Count == 0)
                                     {
@@ -483,7 +485,7 @@ while (continueRunning)
                                         Extra.WaitForInput();
                                     }
                                     break;
-                                case "4":
+                                case 4:
                                     List<Trade> deniedTrades = trades.Where(t => (t.Sender == active_user || t.Receiver == active_user) && t.Status == TradeStatus.Denied).ToList();
                                     if (deniedTrades.Count == 0)
                                     {
@@ -503,13 +505,13 @@ while (continueRunning)
                                         Extra.WaitForInput();
                                     }
                                     break;
-                                case "5":
+                                case 5:
                                     tradeRunning = false;
                                     Thread.Sleep(3000);
                                     break;
                             }
                             break;
-                        case "4":
+                        case 4:
                             tradeRunning = false;
                             Thread.Sleep(3000);
                             break;
