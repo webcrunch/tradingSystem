@@ -47,7 +47,7 @@ If a file is missing, the program starts with an empty list instead of crashing.
 
 The following points detail the key design decisions made during the development, adhering to good Object-Oriented Programming (OOP) principles.
 
-1. Separation of Concerns (SRP)
+#### 1. Separation of Concerns (SRP)
 I have chose to strictly separate logic into distinct files based on responsibility:
 
 Program.cs: Handles the high-level application flow (the main loop and the primary switch-statement) and centralizes data management (calling the JSON load/save methods).
@@ -62,7 +62,7 @@ FileHandler.cs (Data Persistence) Handles JSON serialization/deserialization and
 
 Rationale: This structure adheres to the Single Responsibility Principle (SRP). The main program logic is clean and readable because it delegates all messy input validation and utility tasks to the Extra class.
 
-2. Input Handling Philosophy
+#### 2. Input Handling Philosophy
 I have intentionally avoided mixing input reading (Console.ReadLine()) and complex validation logic in the main application flow.
 
 Custom Input Functions: Functions like Extra.GetIntegerInput() loop internally until the user provides valid data (e.g., a number).
@@ -71,7 +71,7 @@ Extra.WaitForInput(): Used instead of Thread.Sleep().
 
 Rationale: This design choice provides a superior User Experience (UX) by giving control to the user, who can press a key when ready. Furthermore, it follows the DRY (Don't Repeat Yourself) principle by centralizing all input validation code in one place, making the application robust and easy to update.
 
-3. Composition over Inheritance
+#### 3. Composition over Inheritance
 The class relationships were designed using Composition, avoiding complex Inheritance hierarchies.
 
 Composition Used:
