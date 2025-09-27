@@ -20,9 +20,9 @@ A simple console-based trading system written in C# (.NET 9). This project allow
 
 2. **Build and Run**:
    - Open a terminal in the project root directory.
-   - Run the following commands:
+   - Run the following commands: (due to some complications we need to tell the build function what file we want to use)
      ```bash
-     dotnet build
+     dotnet build tradingSystem.sln   
      dotnet run
      ```
 
