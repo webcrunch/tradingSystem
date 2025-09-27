@@ -48,6 +48,10 @@ User? active_user = null;
 users.Add(new User("test", "test")); // User1 for testing
 users.Add(new User("albert", "beteman")); // User2 for testing
 users.Add(new User("jarl", "jarleman")); // User3 user for testing
+users.Add(new User("Cat_AYBABTU", "cat@z88.net")); // User3 user for testing
+users.Add(new User("TheNegotiator", "zero_wing@trade.com")); // User3 user for testing
+users.Add(new User("LoneWanderer", "vault101@trade.com")); // User3 user for testing
+users.Add(new User("AYBABTU@trade.com", "1991"));
 // Log in and create some items for the first user
 active_user = users[0]; // Log in the test user
 active_user.AddItem(new Item("Böcker", "32 stycken nalle puh böcker")); // Items for testing
@@ -63,6 +67,21 @@ active_user = users[2]; // Log in the test user
 active_user.AddItem(new Item("Bilar", "32 stycken leksaksbilar")); // Items for testing
 active_user.AddItem(new Item("dator", "en macbook pro 2020")); // Items for testing
 active_user = null; // Log out the test user
+
+active_user = users[3]; // Log in the test user
+active_user.AddItem(new Item("Zero Wing Module", "Kärnmodulen från Zero Wing - kapseln.Kan vara viktigt.")); // Items for testing
+active_user.AddItem(new Item("A Big Red Button", "You Set Up Us The Bomb")); // Items for testing, Handling this trade item specila
+
+active_user = null; // Log out the test user
+
+active_user = users[4]; // Log in the test user
+active_user.AddItem(new Item("All Base Keycard", "Giver dig tillgång till alla dörrar.Kräver dock att alla dina baser tillhör oss")); // Items for testing
+active_user.AddItem(new Item("Main Screen Blueprint", "Ritningar för att slå på huvudskärmen. Försiktighet rekommenderas")); // Items for testing
+active_user.AddItem(new Item("Make Your Time Watch", "Ett armbandsur ställt på 'NU'. Kan inte justeras")); // Items for testing
+active_user.AddItem(new Item("Someone Else's Ship", "Ett rymdskepp som ingen minns vems det är.Ett bra bytesobjekt")); // Items for testing
+active_user = null; // Log out the test user
+
+
 // _______ end of dummy data for testing purposes _________
 
 // i have decided to create a class named Menu for handling the menu system.
