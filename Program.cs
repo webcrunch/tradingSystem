@@ -180,7 +180,7 @@ while (continueRunning)
                 // there will be three cases for the switch. Only two of them are operational. 
                 // Dont know if i will create a removal of account. perhaps its own account in that case. 
                 // So the first case is for creating a new account. The third one is for going up a step in the menu.   
-                switch (Extra.GetIntegerInput(""))
+                switch (Extra.GetIntegerInput("Choose an option: "))
                 {
                     case 1:
                         Console.WriteLine("Create account selected.");
@@ -284,7 +284,7 @@ while (continueRunning)
                 while (tradeRunning)
                 {
                     Extra.Trademenu();
-                    switch (Extra.GetIntegerInput(""))
+                    switch (Extra.GetIntegerInput("Choose an option: "))
                     {
                         case 1:
                             Console.WriteLine("Request trade selected");
@@ -363,7 +363,7 @@ while (continueRunning)
                             break;
                         case 3:
                             Extra.ShowMenyTradeHandling();
-                            switch (Extra.GetIntegerInput(""))
+                            switch (Extra.GetIntegerInput("Choose an option: "))
                             {
                                 case 1:
                                     List<Trade> sentTrades = trades.Where(t => t.Sender == active_user && t.Status != TradeStatus.Canceled).ToList();
