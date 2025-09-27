@@ -32,6 +32,11 @@ List<User> users = new List<User>();
 List<Item> items = new List<Item>();
 List<Trade> trades = new List<Trade>();
 
+// This bool is for controlling the main loop of the program.
+bool continueRunning = true;
+// This is for keeping track of the currently logged-in user. 
+// default value is null, meaning no user is logged in.
+User? active_user = null;
 
 // _______ dummy data for testing purposes _________
 // Creating a dump user and item for testing
@@ -62,11 +67,7 @@ active_user = null; // Log out the test user
 // it is mostly for displaying the menus and some helper functions. 
 // And to try to keep the Program.cs file clean.
 
-// This bool is for controlling the main loop of the program.
-bool continueRunning = true;
-// This is for keeping track of the currently logged-in user. 
-// default value is null, meaning no user is logged in.
-User? active_user = null;
+
 // to keep a live loop of the program until the user decides to exit.
 // I have choosen to build the logic for the menu system with two layers. 
 // Login - Account - Item - Trade - Exit
@@ -83,7 +84,9 @@ while (continueRunning)
     // I am using the null conditional operator and the null coalescing operator for this. 
     // It is a concise way to handle null values as an if statement. 
     // if we have value from active_user.Email it will be used otherwise the default message will be used.
-    Extra.MainMenu(active_user.Email ?? "No user logged in");
+    // Need to work even if the active_user is nill. Thats why we have activ_user?. 
+    // So it could nullable
+    Extra.MainMenu(active_user?.Email ?? "No user logged in");
     // int the switch case the user will enter the input for the main menu.
     // for the switch there is five cases.
     switch (Console.ReadLine() ?? "")
@@ -110,7 +113,7 @@ while (continueRunning)
                         // We do a check in the users list to see if the user exists.
                         // If the user exists we set the active_user to the found user.
                         // and to handle the case that the user is not adding something we use the null coalescing operator.
-                        // Ff the user is not found we display a message to the user also. 
+                        // If the user is not found we display a message to the user also. 
                         // while are using find for the users list to find the user. 
                         // Inside the find we are using a lambda expression to check if the user exists with the TryLogin method from the User class.
                         // It will loop through the entire list until it finds a match or returns null if no match is found.
@@ -213,12 +216,45 @@ while (continueRunning)
                 {
                     // Here we call on the itemMenu from the Extra class 
                     Extra.itemMenu();
+                    // The switch is handlign the users input
+                    // There is four cases that handles 
+                    // added item, showing your own items
+                    // showing all other users items and the last one is going up to the main menu.
                     switch (Console.ReadLine() ?? "")
                     {
                         case "1":
+                            // the first case is handling the adding a new item. 
+                            // from what the construction of a new item it need the name and 
+                            // the description for the new item. 
                             Console.WriteLine("Adding new item selected.");
+                            // We are asking the user to enter a name they want to give the item. 
                             Console.Write("Enter item name: ");
-                            string itemName = Console.ReadLine() ?? "";
+                            string itemName = "";
+                            // to check so the user is going to enter a value to the name of Item, 
+                            // i am using a while loop that is checking 
+                            // if the value of the string,aka the ItemName, 
+                            // is null or only white space. 
+                            // Default it will be true becase we set it to empthy string above.
+                            while (string.IsNullOrWhiteSpace(itemName))
+                            {
+                                // writing on the screen.
+                                Console.WriteLine("Enter item name:");
+                                // user is giving a input back and save it to the value itemName
+                                // If the user press enter it will be a empthy string
+                                itemName = Console.ReadLine() ?? "";
+
+                                // Here we check if the itemName is still empthy 
+                                // and in that case we will print a message to the user.  
+                                if (string.IsNullOrWhiteSpace(itemName))
+                                {
+                                    Extra.DisplayAlertText("You need to give a name to the item.");
+
+                                }
+                            }
+
+                            // I am thinking that we dont need to do the same check for 
+                            // description. We let the user choose if they want that empthy,
+                            // for now. Could be a WIP.
                             Console.Write("Enter item description: ");
                             string itemDescription = Console.ReadLine() ?? "";
                             items.Add(new Item(itemName, itemDescription));
@@ -227,8 +263,11 @@ while (continueRunning)
                             Thread.Sleep(3000);
                             break;
                         case "2":
+                            // This case is handling the display of the user that is logged in.
                             Console.WriteLine("Your items:");
-                            active_user?.ShowItems();
+                            // calling a function from user class to show all the items for the 
+                            // user that is logged in aka the user that is added to the active_user.
+                            active_user.ShowItems();
                             break;
                         case "3":
                             Console.WriteLine("Showing all others items:");

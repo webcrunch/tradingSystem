@@ -51,8 +51,11 @@ class User
             message.Clear();
         }
     }
-    public Item? FindItem(string itemName)
+    public Item FindItem(string itemName)
     {
+        // here we are searcing for the item. We do a check if the itemName we are sending to the list
+        // is found. The StringComparison.OrdinalIgnoreCase does not mind the if it is uppercase, lowecase
+        // or mixxed. So it only checks if the spelling is the same. example: 
         return Items.Find(item => item.Name.Equals(itemName, StringComparison.OrdinalIgnoreCase));
     }
 
@@ -60,13 +63,16 @@ class User
     public void RemoveItem(Item itemToRemove)
     {
         // Använd Remove för att ta bort den specifika referensen till objektet
+        // using the Remove function in lists. And remove the current item
+        // not using it anywhere but it is there if we need it. 
+        // And yes i know that some people say that we dont build for the future ;)
         Items.Remove(itemToRemove);
     }
 
 
     public void ShowItems()
     {
-        foreach (var item in Items)
+        foreach (Item item in Items)
         {
             Console.WriteLine("-----------------------------");
             Console.WriteLine($"Name of User: {Email}");
