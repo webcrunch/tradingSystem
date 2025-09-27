@@ -90,12 +90,15 @@ Rationale: Using Composition (the "has-a" relationship) results in clear, flexib
   - `User.cs` — User model and authentication
   - `Item.cs` — Item model
   - `Trade.cs` — Trade model and status
-  - `Utils.cs` — Utility and menu display functions
+  - `Display.cs` — Display functions
+  - `Trade.cs` — menu functions
+  - `Utils.cs` — Utility and validation function
 - `trading_system.csproj` — Project file
 
 ## Notes
 - The project uses in-memory lists for users and items (no database).
 - Default test users and items are created at startup for demonstration.
+- WIP: json read and write for handling saving data to file
 
 ## Example Menu
 ```
