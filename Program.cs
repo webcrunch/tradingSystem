@@ -431,34 +431,36 @@ while (continueRunning)
 
                                             Console.WriteLine($"{i + 1}. Status: {trade.Status} | From: {trade.Sender.Email} | They offer: {trade.ItemTraded[0].Name} | They want: {trade.ItemTraded[1].Name}");
                                         }
-                                        Console.Write("Select a trade to handle (enter number): ");
-                                        if (int.TryParse(Console.ReadLine(), out int tradeIndex) && tradeIndex > 0 && tradeIndex <= recivedTrades.Count)
+                                        int tradeIndex = Extra.GetIntegerInput("Select a trade to handle (enter number):");
+                                        if (tradeIndex > 0 && tradeIndex <= recivedTrades.Count)
                                         {
                                             Trade selectedTrade = recivedTrades[tradeIndex - 1];
+                                            Console.WriteLine("\n--- Trade Options ---");
                                             Console.WriteLine("1. Accept Trade");
                                             Console.WriteLine("2. Deny Trade");
-                                            Console.Write("Choose an option: ");
-                                            string? actionChoice = Console.ReadLine();
-                                            if (actionChoice == "1")
+                                            Console.WriteLine("---------------------\n");
+                                            switch (Extra.GetIntegerInput("Choose an option:"))
                                             {
-                                                selectedTrade.AcceptTrade();
-                                                Extra.DisplaySuccesText("Trade accepted.");
-                                            }
-                                            else if (actionChoice == "2")
-                                            {
-                                                selectedTrade.DenyTrade();
-                                                Extra.DisplaySuccesText("Trade denied.");
-                                            }
-                                            else
-                                            {
-                                                Extra.DisplayAlertText("Invalid action choice.");
+                                                case 1:
+                                                    selectedTrade.AcceptTrade();
+                                                    Extra.DisplaySuccesText("Trade accepted.");
+                                                    break;
+
+                                                case 2:
+                                                    selectedTrade.DenyTrade();
+                                                    Extra.DisplaySuccesText("Trade denied.");
+                                                    break;
+                                                default:
+                                                    Extra.DisplayAlertText("Invalid action choice.");
+                                                    break;
                                             }
                                         }
                                         else
                                         {
                                             Extra.DisplayAlertText("Invalid trade selection.");
                                         }
-                                        Thread.Sleep(2000);
+                                        Console.WriteLine("Press a key to continue..");
+                                        Extra.WaitForInput();
                                     }
                                     break;
                                 case "3":
@@ -477,8 +479,8 @@ while (continueRunning)
                                             Trade trade = acceptedTrades[i];
                                             Console.WriteLine($"{i + 1}. Status: {trade.Status} | With: {(trade.Sender == active_user ? trade.Receiver.Email : trade.Sender.Email)} | You offered: {trade.ItemTraded[0].Name} | You received: {trade.ItemTraded[1].Name}");
                                         }
+                                        Console.WriteLine("Press a key to continue..");
                                         Extra.WaitForInput();
-
                                     }
                                     break;
                                 case "4":
@@ -497,7 +499,8 @@ while (continueRunning)
                                             Trade trade = deniedTrades[i];
                                             Console.WriteLine($"{i + 1}. Status: {trade.Status} | With: {(trade.Sender == active_user ? trade.Receiver.Email : trade.Sender.Email)} | You offered: {trade.ItemTraded[0].Name} | You wanted: {trade.ItemTraded[1].Name}");
                                         }
-                                        Thread.Sleep(3000);
+                                        Console.WriteLine("Press a key to continue..");
+                                        Extra.WaitForInput();
                                     }
                                     break;
                                 case "5":
@@ -505,9 +508,6 @@ while (continueRunning)
                                     Thread.Sleep(3000);
                                     break;
                             }
-
-
-
                             break;
                         case "4":
                             tradeRunning = false;
