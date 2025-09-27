@@ -41,15 +41,15 @@ The following requirements have been implemented and validated:
 
   - View a list of sent trade requests.✅
 
- - Cancel a sent trade request (only if the user is the sender).✅
+  - Cancel a sent trade request (only if the user is the sender).✅
 
- - Browse received/pending trade requests.✅
+  - Browse received/pending trade requests.✅
 
- - Accept a trade request (only if the user is the recipient).✅
+  - Accept a trade request (only if the user is the recipient).✅
 
- - Deny a trade request (only if the user is the recipient).✅
+  - Deny a trade request (only if the user is the recipient).✅
 
- - Browse completed (accepted/denied) requests. ✅
+  - Browse completed (accepted/denied) requests. ✅
 
 #### Code Structure:
 
