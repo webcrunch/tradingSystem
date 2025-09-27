@@ -51,7 +51,7 @@ class User
             message.Clear();
         }
     }
-    public Item FindItem(string itemName)
+    public Item? FindItem(string itemName)
     {
         // here we are searcing for the item. We do a check if the itemName we are sending to the list
         // is found. The StringComparison.OrdinalIgnoreCase does not mind the if it is uppercase, lowecase

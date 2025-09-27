@@ -4,12 +4,10 @@ namespace TradingSystem;
 class Extra
 {
 
-
-
-    public static bool UserExisting(List<User> users)
-    {
-        return users.Count > 0;
-    }
+    // public static bool UserExisting(List<User> users)
+    // {
+    //     return users.Count > 0;
+    // }
 
 
     // creating a function that handles all the waiting for the user to go further
