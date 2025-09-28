@@ -45,13 +45,13 @@ User? active_user = null;
 // Creating a dump user and item for testing
 // creating three users and two items for each user.
 // This is just for testing purposes. and to be able to see how the program works.
-users.Add(new User("test", "test")); // User1 for testing
-users.Add(new User("albert", "beteman")); // User2 for testing
-users.Add(new User("jarl", "jarleman")); // User3 user for testing
-users.Add(new User("Cat_AYBABTU", "cat@z88.net")); // User3 user for testing
-users.Add(new User("TheNegotiator", "zero_wing@trade.com")); // User3 user for testing
-users.Add(new User("LoneWanderer", "vault101@trade.com")); // User3 user for testing
-users.Add(new User("AYBABTU@trade.com", "1991"));
+users.Add(new User("testUser", "test", "test")); // User1 for testing
+users.Add(new User("albert", "beteman", "test")); // User2 for testing
+users.Add(new User("jarl", "jarleman", "test")); // User3 user for testing
+users.Add(new User("Cat_AYBABTU", "cat@z88.net", "test")); // User3 user for testing
+users.Add(new User("TheNegotiator", "zero_wing@trade.com", "test")); // User3 user for testing
+users.Add(new User("LoneWanderer", "vault101@trade.com", "test")); // User3 user for testing
+users.Add(new User("AYBABTU@trade.com", "1991", "test"));
 // Log in and create some items for the first user
 active_user = users[0]; // Log in the test user
 active_user.AddItem(new Item("Böcker", "32 stycken nalle puh böcker")); // Items for testing
@@ -106,7 +106,7 @@ while (continueRunning)
     // if we have value from active_user.Email it will be used otherwise the default message will be used.
     // Need to work even if the active_user is nill. Thats why we have activ_user?. 
     // So it could nullable
-    Menu.MainMenu(active_user?.Email ?? "No user logged in");
+    Menu.MainMenu(active_user?.Username ?? "No user logged in");
     // int the switch case the user will enter the input for the main menu.
     // for the switch there is five cases.
     switch (Extra.GetIntegerInput(""))
@@ -227,9 +227,10 @@ while (continueRunning)
                 {
                     case 1:
                         Console.WriteLine("Create account selected.");
+                        string CreateInputEmail = Extra.GetRequiredInput("Enter email for the account: ");
                         string CreateInputUsername = Extra.GetRequiredInput("Enter username for the account: ");
-                        string CreateInputPassword = Extra.GetRequiredInput("Enter username for the account: ");
-                        users.Add(new User(CreateInputUsername, CreateInputPassword));
+                        string CreateInputPassword = Extra.GetRequiredInput("Enter password for the account: ");
+                        users.Add(new User(CreateInputUsername, CreateInputEmail, CreateInputPassword));
                         Display.DisplaySuccesText("Account created successfully.");
                         Extra.WaitForInput();
                         break;
@@ -356,7 +357,7 @@ while (continueRunning)
                                 if (receiver != active_user)
                                 {
                                     // Choose the item that the user wants to trade
-                                    Console.WriteLine($"Selected user: {receiver.Email}");
+                                    Console.WriteLine($"Selected user: {receiver.Username}");
                                     Console.WriteLine("Select a item to trade from your items");
                                     active_user.ShowItems();
 
@@ -381,7 +382,7 @@ while (continueRunning)
 
                                     trades.Add(new Trade(active_user, receiver, newtradedItems));
                                     string senderMessage = $"You have sent a trade request to {receiver.Email} for item {itemToRecive.Name}.";
-                                    string receiverMessage = $"{active_user.Email} has requested to trade their item {itemToTrade.Name} for your item {itemToRecive.Name}.";
+                                    string receiverMessage = $"{active_user.Username} has requested to trade their item {itemToTrade.Name} for your item {itemToRecive.Name}.";
 
                                     active_user.message.Add(senderMessage);
                                     receiver.message.Add(receiverMessage);

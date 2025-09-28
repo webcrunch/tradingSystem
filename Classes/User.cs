@@ -18,13 +18,15 @@ class User
      # TryLogin takes in a username and password and returns true if they match the users email and password.
     */
     public string Email;
+    public string Username;
     string _password;
     List<Item> Items = new List<Item>();
     public List<string> message = new List<string>();
 
-    public User(string username, string password)
+    public User(string username, string email, string password)
     {
-        Email = username;
+        Email = email;
+        Username = username;
         _password = password;
     }
 
@@ -74,14 +76,15 @@ class User
         foreach (Item item in Items)
         {
             Console.WriteLine("-----------------------------");
-            Console.WriteLine($"Name of User: {Email}");
+            Console.WriteLine($"Name of User: {Username}");
             Console.WriteLine($"NameOfItem: {item.Name}");
             Console.WriteLine($"Description: {item.Description}");
         }
         Console.WriteLine("-----------------------------");
     }
-    public bool TryLogin(string username, string password)
+    public bool TryLogin(string email, string password)
     {
-        return username == Email && password == _password;
+        Console.WriteLine("password input: " + password + " email input: " + email + " password private: " + _password + " public email: " + Email);
+        return email == Email && password == _password;
     }
 }
