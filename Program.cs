@@ -23,8 +23,6 @@
 // TODO: only cancel the user if the sender. ---- finished
 // TODO: save to file json WIP
 // TODO: Read from json file and init data WIP
-using System.Text.Json; // För att hantera JSON
-using System.IO;         // För att hantera filer
 
 // I am usign the TradingSystem namespace.
 using TradingSystem;
@@ -32,8 +30,11 @@ using TradingSystem;
 // The dataformat for each list is a from User class, Item class and Trade class.
 // i calling them users, items and trades.
 List<User> users = new List<User>();
-List<Item> items = new List<Item>();
 List<Trade> trades = new List<Trade>();
+// Ladda data vid start
+// List<User> users = FileHandler.LoadFromJson<User>(FileHandler.SaveToJsonUser);
+// List<Trade> trades = FileHandler.LoadFromJson<Trade>(FileHandler.TradeFileName);
+
 
 // This bool is for controlling the main loop of the program.
 bool continueRunning = true;
@@ -281,7 +282,9 @@ while (continueRunning)
                             // for now. Could be a WIP.
                             Console.Write("Enter item description: ");
                             string itemDescription = Console.ReadLine() ?? "";
-                            items.Add(new Item(itemName, itemDescription));
+                            // // create a list for one item 
+                            // List<Item> items = new List<Item>();
+                            // items.Add(new Item(itemName, itemDescription));
                             Display.DisplaySuccesText("Item added successfully.");
                             active_user?.AddItem(new Item(itemName, itemDescription));
                             Extra.WaitForInput();
@@ -570,6 +573,8 @@ while (continueRunning)
             }
         case 7:
             Console.WriteLine("Exiting...");
+            FileHandler.SaveUsersToCsv(users);
+            FileHandler.SaveTradesToCsv(trades);
             continueRunning = false;
             break;
     }
