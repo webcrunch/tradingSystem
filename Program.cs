@@ -257,7 +257,7 @@ while (continueRunning)
                 // we use that for the while loop so it will continue until the user execute a stop for it. 
                 while (itemRunning)
                 {
-                    // Here we call on the itemMenu from the Extra class 
+                    // Here we call on the itemMenu from the Menu class 
                     Menu.itemMenu();
                     // The switch is handlign the users input
                     // There is four cases that handles 
@@ -291,7 +291,7 @@ while (continueRunning)
                             Console.WriteLine("Your items:");
                             // calling a function from user class to show all the items for the 
                             // user that is logged in aka the user that is added to the active_user.
-                            active_user.ShowItems();
+                            active_user?.ShowItems();
                             break;
                         case 3:
                             // The third case is handling the display of all the items that all the other users has created 
@@ -368,7 +368,7 @@ while (continueRunning)
 
                                     if (itemToTrade == null)
                                     {
-                                        Display.DisplayAlertText("Item not found in your items.");
+                                        Display.DisplayAlertText("Item not found in your items list.");
                                         Extra.WaitForInput();
                                         return;
                                     }
@@ -377,7 +377,12 @@ while (continueRunning)
 
                                     // string itemToRecivieName = Extra.GetRequiredInput("Enter the name of the item you want to receive: ");
                                     Item? itemToRecive = receiver.FindItem(Extra.GetRequiredInput("Enter the name of the item you want to receive: "));
-
+                                    if (itemToRecive == null)
+                                    {
+                                        Display.DisplayAlertText("Item not found in their items  list.");
+                                        Extra.WaitForInput();
+                                        return;
+                                    }
                                     Item[] newtradedItems = new Item[] { itemToTrade, itemToRecive };
 
                                     trades.Add(new Trade(active_user, receiver, newtradedItems));
