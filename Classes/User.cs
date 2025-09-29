@@ -71,6 +71,27 @@ class User
     }
 
 
+    /* created a function that will loop trough all the items from the user that calls the function. 
+     for example: active_user.showItems();
+     Or in a for loop we could call it like this: 
+       foreach (User user in users)
+     {
+         if (user == active_user) continue; // Skip the active user's items
+         -- user.ShowItems(); --
+     }*/
+
+    /* It will look like this for example: 
+     The example is for the current active user:
+         Your items:
+     -----------------------------
+     Name of User: testUser
+     NameOfItem: Böcker
+     Description: 32 stycken nalle puh böcker
+     -----------------------------
+     Name of User: testUser
+     NameOfItem: handskar
+     Description: 2 par elefanthanskar
+     ----------------------------- */
     public void ShowItems()
     {
         foreach (Item item in Items)
@@ -82,9 +103,9 @@ class User
         }
         Console.WriteLine("-----------------------------");
     }
+    // Function that send true if the user input right email and password
     public bool TryLogin(string email, string password)
     {
-        Console.WriteLine("password input: " + password + " email input: " + email + " password private: " + _password + " public email: " + Email);
         return email == Email && password == _password;
     }
 }
