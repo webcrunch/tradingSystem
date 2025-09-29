@@ -3,12 +3,14 @@ namespace TradingSystem;
 
 class Extra
 {
-
+    // I am using this to verify if there is a empty user list.
+    // I am using this to check so there is an ability to login otherwise 
+    // let the user know that it needs to add a account
     public static bool UserExisting(List<User> users)
     {
+        // returning true if there is at least one user in the list 
         return users.Count > 0;
     }
-
 
     // creating a function that handles all the waiting for the user to go further
     public static void WaitForInput()
@@ -20,8 +22,6 @@ class Extra
         // the user is sending in for this event.  
         Console.ReadKey(true);
     }
-
-
 
     public static string GetRequiredInput(string promptMessage)
     {

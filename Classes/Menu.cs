@@ -11,8 +11,8 @@ class Menu
         Console.WriteLine();
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("  ╔════════════════════════════════╗");
-        Console.WriteLine("  ║    --  Trading System  --      ║");
-        Console.WriteLine("  ║        Choose a number         ║");
+        Console.WriteLine("  ║    -- Trading System  --       ║");
+        Console.WriteLine("  ║       (Choose a number)        ║");
         Console.WriteLine($"  ║       User {userStatus,-20}║");
         Console.WriteLine("  ╠════════════════════════════════╣");
         Console.WriteLine("  ║        1. (Login)              ║");
@@ -21,7 +21,6 @@ class Menu
         Console.WriteLine("  ║        4. (Trade)              ║");
         Console.WriteLine("  ║        7. (Exit)               ║");
         Console.WriteLine("  ╚════════════════════════════════╝");
-
         Console.WriteLine();
         Console.WriteLine();
         Console.WriteLine();
@@ -103,7 +102,7 @@ class Menu
     public static void TradeOptionsMenu()
     {
 
-Console.ForegroundColor = ConsoleColor.Green;
+        Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine(" ╔═════════════════════════╗ ");
         Console.WriteLine(" ║  --- Trade Options ---  ║ ");
         Console.WriteLine(" ╠═════════════════════════╣ ");
