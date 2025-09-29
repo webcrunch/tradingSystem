@@ -8,14 +8,14 @@ class Display
         Console.WriteLine();
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine($"{text}");
-        Console.ResetColor(); // Återställer textfärgen        
+        Console.ResetColor(); // Clear the color        
     }
     public static void DisplayAlertText(string text, int delay = 50)
     {
         Console.WriteLine();
         Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine($"{text}");
-        Console.ResetColor(); // Återställer textfärgen        
+        Console.ResetColor(); // Clear the color        
     }
 
     public static void DisplayUsers(List<User> users, User active_user)

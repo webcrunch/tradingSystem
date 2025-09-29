@@ -62,12 +62,9 @@ class Extra
             }
             else
             {
-                Display.DisplayAlertText("Not accepteble input. User only numbers.");
+                Display.DisplayAlertText("Not accepteble input. User only numbers.Try again: ");
                 WaitForInput();
             }
         }
     }
-
-
-
 }
