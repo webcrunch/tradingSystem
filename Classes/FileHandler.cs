@@ -14,31 +14,42 @@ class FileHandler
 
     public static void SaveUsersToCsv(List<User> users)
     {
-        List<string> PrintToUsers = new List<string>();
+        // 1. Lista för Users (Users skrivs över vid varje körning)
+        List<string> PrintToUsers = new List<string>() { "Username,Email,Passwor" };
 
-        // Lägg till header-raden
-        string titleText = "Username,Email,Password";
-        PrintToUsers.Add(titleText);
+        // 2. Lista för Items (Aggregerar ALLA items från ALLA users)
+        // Denna lista är tom vid start av denna funktion, vilket förhindrar dubbletter.
+        List<string> PrintToItems = new List<string>() { "Owner_Username,ItemName,Description" };
 
         foreach (User user in users)
         {
-            string handlingText = $"{user.Username},{user.Email},{user.GetpassWord()}";
-            PrintToUsers.Add(handlingText);
-            SaveItemsToCsv(user.Items, user.Username);
+            string userHandlingText = $"{user.Username},{user.Email},{user.GetpassWord}";
+            PrintToUsers.Add(userHandlingText);
+
+            // We are agregrating the items lines for the user thats in the loop at the time.
+            foreach (Item item in user.Items)
+            {
+                // Inkludera ägarens Username för att veta vem som äger föremålet
+                string itemHandlingText = $"{user.Username},{item.Name},{item.Description}";
+                PrintToItems.Add(itemHandlingText);
+            }
         }
 
+        // --- SAVE USERS ---
         try
         {
-            // 1. Skicka filnamnet ("users_export.csv")
-            // 2. Skicka listan med strängar (PrintToUsers)
+            // File.WriteAllLines garanterar overwrite, vilket förhindrar dubbletter mellan sessions
             File.WriteAllLines(UserCsvFileName, PrintToUsers, Encoding.UTF8);
-
             Console.WriteLine($"Användardata exporterad till {UserCsvFileName}.");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"FEL vid export till CSV: {ex.Message}");
+            Console.WriteLine($"FEL vid export av användare till CSV: {ex.Message}");
         }
+
+        // --- SAVE THE ITEMS ---
+        // Call an dedicated function to write the Anropar en dedikerad funktion för att skriva över Item-filen helt.
+        SaveAllItemsToCsv(PrintToItems);
     }
 
     public static void SaveTradesToCsv(List<Trade> trades)
@@ -59,7 +70,7 @@ class FileHandler
         {
             File.WriteAllLines(TradeCsvFileName, PrintToTrades, Encoding.UTF8);
 
-            Console.WriteLine($"Användardata exporterad till {TradeCsvFileName}.");
+            // Console.WriteLine($"Användardata exporterad till {TradeCsvFileName}.");
         }
         catch (Exception ex)
         {
@@ -67,26 +78,19 @@ class FileHandler
         }
     }
 
-    public static void SaveItemsToCsv(List<Item> items, string user)
+    public static void SaveAllItemsToCsv(List<string> itemLines)
     {
-        List<string> PrintToItems = new List<string>() { "User,Name,Description" };
-        // Lägg till header-raden
-
-        foreach (Item item in items)
-        {
-            // string handlingText = $"{item.Name},{item.Description}";
-            string handlingText = " Dddddddddddddd";
-            PrintToItems.Add(handlingText);
-        }
         try
         {
-            File.WriteAllLines(ItemsCsvFileName, PrintToItems, Encoding.UTF8);
-
-            Console.WriteLine($"Användardata exporterad till {ItemsCsvFileName}.");
+            // Använd File.WriteAllLines för att Garantera att filen skrivs över helt 
+            // vid varje körning. Detta eliminerar alla dubbletter från tidigare sessions.
+            File.WriteAllLines(ItemsCsvFileName, itemLines, Encoding.UTF8);
+            Console.WriteLine($"Föremålsdata exporterad till {ItemsCsvFileName}.");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"FEL vid export till CSV: {ex.Message}");
+            Console.WriteLine($"FEL vid export av föremål till CSV: {ex.Message}");
         }
     }
+
 }

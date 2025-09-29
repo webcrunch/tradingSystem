@@ -20,7 +20,7 @@ class User
     public string Email;
     public string Username;
     string _password;
-    List<Item> Items = new List<Item>();
+    public List<Item> Items = new List<Item>();
     public List<string> message = new List<string>();
 
     public User(string username, string email, string password)
@@ -35,6 +35,10 @@ class User
         Items.Add(itemList);
     }
 
+    public string GetpassWord()
+    {
+        return _password;
+    }
 
     public void displayMessage()
     {
@@ -64,7 +68,7 @@ class User
 
     public void RemoveItem(Item itemToRemove)
     {
-        // Använd Remove för att ta bort den specifika referensen till objektet
+        // use the Remove function to remve a specific item fro the user
         // using the Remove function in lists. And remove the current item
         // We are using it when it is an accepted trade. We do a remove and add for each item. 
         Items.Remove(itemToRemove);
