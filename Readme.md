@@ -71,8 +71,10 @@ Read from File (JSON): Implement the function within the FileHandler class to lo
 1. **Requirements**:
    - [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0) or later
    - Windows, Linux, or macOS
-   - Clone the project: git clone git@github.com:webcrunch/tradingSystem.git
-
+   - Clone the project:
+```bash
+     git clone git@github.com:webcrunch/tradingSystem.git
+```
 2. **Build and Run**:
    - Open a terminal in the project root directory.
    - Run the following commands: (due to some complications we need to tell the build function what file we want to use)
@@ -105,15 +107,15 @@ The following points detail the key design decisions made during the development
 #### 1. Separation of Concerns (SRP)
 I have chose to strictly separate logic into distinct files based on responsibility:
 
-Program.cs: Handles the high-level application flow (the main loop and the primary switch-statement) and centralizes data management (calling the JSON load/save methods).
+- Program.cs: Handles the high-level application flow (the main loop and the primary switch-statement) and centralizes data management (calling the JSON load/save methods).
 
-Extra.cs (Utility Class): handles user input validation (GetIntegerInput, GetRequiredInput)
+- Extra.cs (Utility Class): handles user input validation (GetIntegerInput, GetRequiredInput)
 
-Menu.cs (Input and Navigation Class) Prints all menus (e.g., MainMenu).
+- Menu.cs (Input and Navigation Class) Prints all menus (e.g., MainMenu).
 
-Display.cs (Output and Presentation) Shows color-coded messages (AlertText, SuccessText) and formatted data (lists of users/items).
+- Display.cs (Output and Presentation) Shows color-coded messages (AlertText, SuccessText) and formatted data (lists of users/items).
 
-FileHandler.cs (Data Persistence) Handles JSON serialization/deserialization and all disk I/O operations.
+- FileHandler.cs (Data Persistence) Handles JSON serialization/deserialization and all disk I/O operations.
 
 Rationale: This structure adheres to the Single Responsibility Principle (SRP). The main program logic is clean and readable because it delegates all messy input validation and utility tasks to the Extra class.
 
@@ -131,9 +133,9 @@ The class relationships were designed using Composition, avoiding complex Inheri
 
 Composition Used:
 
-The User class has-a list of Item objects.
+- The User class has-a list of Item objects.
 
-The Trade class has-a reference to two User objects (Sender/Receiver) and two Item objects.
+- The Trade class has-a reference to two User objects (Sender/Receiver) and two Item objects.
 
 Rationale: Using Composition (the "has-a" relationship) results in clear, flexible, and decoupled classes. Since our classes (User, Item, Trade) do not share a strong "is-a" relationship, using Inheritance would have introduced unnecessary complexity and tightly coupled code, making future changes harder.
 
