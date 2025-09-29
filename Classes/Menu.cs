@@ -13,7 +13,7 @@ class Menu
         Console.WriteLine("  ╔════════════════════════════════╗");
         Console.WriteLine("  ║    -- Trading System  --       ║");
         Console.WriteLine("  ║       (Choose a number)        ║");
-        Console.WriteLine($"  ║       User {userStatus,-20}║");
+        Console.WriteLine($"  ║      User: {userStatus,-20}║");
         Console.WriteLine("  ╠════════════════════════════════╣");
         Console.WriteLine("  ║        1. (Login)              ║");
         Console.WriteLine("  ║        2. (Account)            ║");
@@ -49,7 +49,7 @@ class Menu
         Console.WriteLine();
         Console.WriteLine();
         Console.WriteLine();
-        Console.ForegroundColor = ConsoleColor.Green;
+        Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine(" ╔══════════════════════════╗ ");
         Console.WriteLine(" ║     Trade Menu           ║ ");
         Console.WriteLine(" ╠══════════════════════════╣ ");
@@ -87,7 +87,7 @@ class Menu
         Console.WriteLine();
         Console.WriteLine();
         Console.WriteLine();
-        Console.ForegroundColor = ConsoleColor.Green;
+        Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine(" ╔═════════════════════════╗ ");
         Console.WriteLine(" ║       Trade Menu        ║ ");
         Console.WriteLine(" ╠═════════════════════════╣ ");
