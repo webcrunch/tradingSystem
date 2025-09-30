@@ -383,6 +383,8 @@ while (continueRunning)
                                         Extra.WaitForInput();
                                         return;
                                     }
+                                    itemToTrade.tradingLimbo = Item.TradingStatus.Trading;
+                                    itemToRecive.tradingLimbo = Item.TradingStatus.Trading;
                                     Item[] newtradedItems = new Item[] { itemToTrade, itemToRecive };
 
                                     trades.Add(new Trade(active_user, receiver, newtradedItems));
@@ -448,6 +450,8 @@ while (continueRunning)
                                             if (tradeToCancel.Status == TradeStatus.Pending)
                                             {
                                                 tradeToCancel.Status = TradeStatus.Canceled;
+                                                tradeToCancel.ItemTraded[0].tradingLimbo = Item.TradingStatus.None;
+                                                tradeToCancel.ItemTraded[1].tradingLimbo = Item.TradingStatus.None;
                                                 string senderMessage = $"You have canceled the trade request to {tradeToCancel.Receiver.Email}.";
                                                 string receiverMessage = $"{active_user.Email} has canceled the trade request.";
                                                 active_user.message.Add(senderMessage);

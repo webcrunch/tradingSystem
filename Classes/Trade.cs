@@ -66,7 +66,10 @@ namespace TradingSystem
         {
             // Only allow denying if trade is pending
             if (Status != TradeStatus.Pending) return;
-
+            Item itemFromSender = ItemTraded[0];
+            Item itemFromReceiver = ItemTraded[1];
+            itemFromReceiver.tradingLimbo = Item.TradingStatus.None;
+            itemFromSender.tradingLimbo = Item.TradingStatus.None;
             // Update trade status
             Status = TradeStatus.Denied;
 
