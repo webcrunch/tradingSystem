@@ -96,16 +96,48 @@ class User
      NameOfItem: handskar
      Description: 2 par elefanthanskar
      ----------------------------- */
-    public void ShowItems()
+    public void ShowItems(bool checkAllORAvailableTrade = true)
     {
         foreach (Item item in Items)
         {
-            Console.WriteLine("-----------------------------");
-            Console.WriteLine($"Name of User: {Username}");
-            Console.WriteLine($"NameOfItem: {item.Name}");
-            Console.WriteLine($"Description: {item.Description}");
+            if (checkAllORAvailableTrade)
+            {
+                Console.WriteLine("-----------------------------");
+                Console.WriteLine($"Name of User: {Username}");
+                Console.WriteLine($"NameOfItem: {item.Name}");
+                Console.WriteLine($"Description: {item.Description}");
+                Console.WriteLine($"Available for Trade: {(item.TradingLimbo == Item.TradingStatus.None ? "Yes" : "No")}");
+            }
+            else if (item.TradingLimbo == Item.TradingStatus.None)
+            {
+                Console.WriteLine("-----------------------------");
+                Console.WriteLine($"Name of User: {Username}");
+                Console.WriteLine($"NameOfItem: {item.Name}");
+                Console.WriteLine($"Description: {item.Description}");
+            }
+
         }
         Console.WriteLine("-----------------------------");
+    }
+
+    public bool ItemForTrade()
+    {
+        List<Item> checkAvailableItem = new List<Item>();
+        if (Items.Count > 0)
+        {
+            foreach (Item item in Items)
+            {
+                if (item.TradingLimbo == Item.TradingStatus.None)
+                {
+                    checkAvailableItem.Add(item);
+                }
+            }
+        }
+        else
+        {
+            return false;
+        }
+        return checkAvailableItem.Count > 0 ? true : false;
     }
     // Function that send true if the user input right email and password
     public bool TryLogin(string email, string password)

@@ -283,7 +283,7 @@ while (continueRunning)
                             // List<Item> items = new List<Item>();
                             // items.Add(new Item(itemName, itemDescription));
                             Display.DisplaySuccesText("Item added successfully.");
-                            active_user?.AddItem(new Item(itemName, itemDescription));
+                            active_user?.AddItem(new Item(itemName, itemDescription, "None"));
                             Extra.WaitForInput();
                             break;
                         case 2:
@@ -359,21 +359,33 @@ while (continueRunning)
                                     // Choose the item that the user wants to trade
                                     Console.WriteLine($"Selected user: {receiver.Username}");
                                     Console.WriteLine("Select a item to trade from your items");
-                                    active_user.ShowItems();
-
+                                    active_user.ShowItems(false);
+                                    Console.WriteLine(active_user.ItemForTrade());
                                     // string itemToTradeName = Extra.GetRequiredInput("Enter the name of the item you want to trade:");
                                     // let the user choose a name of item. After that is sent to the function that search if the item is in the users list. 
                                     // It could be returned null if there is no found. Thats why we set Item as nullable.
+                                    if (active_user.ItemForTrade() != true)
+                                    {
+                                        Display.DisplayAlertText("No more item to from you. Add more items");
+                                        Extra.WaitForInput();
+                                        break;
+                                    }
+                                    if (receiver.ItemForTrade() != true)
+                                    {
+                                        Display.DisplayAlertText("No more item to from the recipiant. You cant trade with that person");
+                                        Extra.WaitForInput();
+                                        break;
+                                    }
                                     Item? itemToTrade = active_user.FindItem(Extra.GetRequiredInput("Enter the name of the item you want to trade:"));
 
                                     if (itemToTrade == null)
                                     {
                                         Display.DisplayAlertText("Item not found in your items list.");
                                         Extra.WaitForInput();
-                                        return;
+                                        break;
                                     }
                                     Console.WriteLine("\n Select a item to recive from the other\\´s users items:");
-                                    receiver.ShowItems();
+                                    receiver.ShowItems(false);
 
                                     // string itemToRecivieName = Extra.GetRequiredInput("Enter the name of the item you want to receive: ");
                                     Item? itemToRecive = receiver.FindItem(Extra.GetRequiredInput("Enter the name of the item you want to receive: "));
@@ -381,10 +393,10 @@ while (continueRunning)
                                     {
                                         Display.DisplayAlertText("Item not found in their items  list.");
                                         Extra.WaitForInput();
-                                        return;
+                                        break;
                                     }
-                                    itemToTrade.tradingLimbo = Item.TradingStatus.Trading;
-                                    itemToRecive.tradingLimbo = Item.TradingStatus.Trading;
+                                    itemToTrade.TradingLimbo = Item.TradingStatus.Trading;
+                                    itemToRecive.TradingLimbo = Item.TradingStatus.Trading;
                                     Item[] newtradedItems = new Item[] { itemToTrade, itemToRecive };
 
                                     trades.Add(new Trade(active_user, receiver, newtradedItems));
@@ -450,8 +462,8 @@ while (continueRunning)
                                             if (tradeToCancel.Status == TradeStatus.Pending)
                                             {
                                                 tradeToCancel.Status = TradeStatus.Canceled;
-                                                tradeToCancel.ItemTraded[0].tradingLimbo = Item.TradingStatus.None;
-                                                tradeToCancel.ItemTraded[1].tradingLimbo = Item.TradingStatus.None;
+                                                tradeToCancel.ItemTraded[0].TradingLimbo = Item.TradingStatus.None;
+                                                tradeToCancel.ItemTraded[1].TradingLimbo = Item.TradingStatus.None;
                                                 string senderMessage = $"You have canceled the trade request to {tradeToCancel.Receiver.Email}.";
                                                 string receiverMessage = $"{active_user.Email} has canceled the trade request.";
                                                 active_user.message.Add(senderMessage);
