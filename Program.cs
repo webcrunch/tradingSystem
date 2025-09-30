@@ -26,10 +26,9 @@
 
 // I am usign the TradingSystem namespace.
 using TradingSystem;
-//  For handle the data for the users and the items and trades i am creating three lists.
-// The dataformat for each list is a from User class, Item class and Trade class.
-// i calling them users, items and trades.
-List<User> users = new List<User>();
+// There are two lists that carries the data from the users. 
+// when we start the program the lists are populating by the value of user, items and trade txt files.
+List<User> users = FileHandler.LoadUsersFromCsv();
 List<Trade> trades = new List<Trade>();
 // Ladda data vid start
 // List<User> users = FileHandler.LoadFromJson<User>(FileHandler.SaveToJsonUser);
@@ -46,41 +45,41 @@ User? active_user = null;
 // Creating a dump user and item for testing
 // creating three users and two items for each user.
 // This is just for testing purposes. and to be able to see how the program works.
-users.Add(new User("testUser", "test", "test")); // User1 for testing
-users.Add(new User("albert", "beteman", "test")); // User2 for testing
-users.Add(new User("jarl", "jarleman", "test")); // User3 user for testing
-users.Add(new User("Cat_AYBABTU", "cat@z88.net", "test")); // User3 user for testing
-users.Add(new User("TheNegotiator", "zero_wing@trade.com", "test")); // User3 user for testing
-users.Add(new User("LoneWanderer", "vault101@trade.com", "test")); // User3 user for testing
-users.Add(new User("AYBABTU@trade.com", "1991", "test"));
+// users.Add(new User("testUser", "test", "test")); // User1 for testing
+// users.Add(new User("albert", "beteman", "test")); // User2 for testing
+// users.Add(new User("jarl", "jarleman", "test")); // User3 user for testing
+// users.Add(new User("Cat_AYBABTU", "cat@z88.net", "test")); // User3 user for testing
+// users.Add(new User("TheNegotiator", "zero_wing@trade.com", "test")); // User3 user for testing
+// users.Add(new User("LoneWanderer", "vault101@trade.com", "test")); // User3 user for testing
+// users.Add(new User("AYBABTU@trade.com", "1991", "test"));
 // Log in and create some items for the first user
-active_user = users[0]; // Log in the test user
-active_user.AddItem(new Item("Böcker", "32 stycken nalle puh böcker")); // Items for testing
-active_user.AddItem(new Item("handskar", "2 par elefanthanskar")); // Items for testing
-active_user = null; // Log out the test user
-// Creating dummy data and log in for the second user
-active_user = users[1]; // Log in the test user
-active_user.AddItem(new Item("Abombs", "100 stora atombomber")); // Items for testing
-active_user.AddItem(new Item("skor", "2 par elefantskor")); // Items for testing
-active_user = null; // Log out the test user
-// Creating dummy data and log in for the third user
-active_user = users[2]; // Log in the test user
-active_user.AddItem(new Item("Bilar", "32 stycken leksaksbilar")); // Items for testing
-active_user.AddItem(new Item("dator", "en macbook pro 2020")); // Items for testing
-active_user = null; // Log out the test user
+// active_user = users[0]; // Log in the test user
+// active_user.AddItem(new Item("Böcker", "32 stycken nalle puh böcker")); // Items for testing
+// active_user.AddItem(new Item("handskar", "2 par elefanthanskar")); // Items for testing
+// active_user = null; // Log out the test user
+// // Creating dummy data and log in for the second user
+// active_user = users[1]; // Log in the test user
+// active_user.AddItem(new Item("Abombs", "100 stora atombomber")); // Items for testing
+// active_user.AddItem(new Item("skor", "2 par elefantskor")); // Items for testing
+// active_user = null; // Log out the test user
+// // Creating dummy data and log in for the third user
+// active_user = users[2]; // Log in the test user
+// active_user.AddItem(new Item("Bilar", "32 stycken leksaksbilar")); // Items for testing
+// active_user.AddItem(new Item("dator", "en macbook pro 2020")); // Items for testing
+// active_user = null; // Log out the test user
 
-active_user = users[3]; // Log in the test user
-active_user.AddItem(new Item("Zero Wing Module", "Kärnmodulen från Zero Wing - kapseln.Kan vara viktigt.")); // Items for testing
-active_user.AddItem(new Item("A Big Red Button", "You Set Up Us The Bomb")); // Items for testing, Handling this trade item specila
+// active_user = users[3]; // Log in the test user
+// active_user.AddItem(new Item("Zero Wing Module", "Kärnmodulen från Zero Wing - kapseln.Kan vara viktigt.")); // Items for testing
+// active_user.AddItem(new Item("A Big Red Button", "You Set Up Us The Bomb")); // Items for testing, Handling this trade item specila
 
-active_user = null; // Log out the test user
+// active_user = null; // Log out the test user
 
-active_user = users[4]; // Log in the test user
-active_user.AddItem(new Item("All Base Keycard", "Giver dig tillgång till alla dörrar.Kräver dock att alla dina baser tillhör oss")); // Items for testing
-active_user.AddItem(new Item("Main Screen Blueprint", "Ritningar för att slå på huvudskärmen. Försiktighet rekommenderas")); // Items for testing
-active_user.AddItem(new Item("Make Your Time Watch", "Ett armbandsur ställt på 'NU'. Kan inte justeras")); // Items for testing
-active_user.AddItem(new Item("Someone Else's Ship", "Ett rymdskepp som ingen minns vems det är.Ett bra bytesobjekt")); // Items for testing
-active_user = null; // Log out the test user
+// active_user = users[4]; // Log in the test user
+// active_user.AddItem(new Item("All Base Keycard", "Giver dig tillgång till alla dörrar.Kräver dock att alla dina baser tillhör oss")); // Items for testing
+// active_user.AddItem(new Item("Main Screen Blueprint", "Ritningar för att slå på huvudskärmen. Försiktighet rekommenderas")); // Items for testing
+// active_user.AddItem(new Item("Make Your Time Watch", "Ett armbandsur ställt på 'NU'. Kan inte justeras")); // Items for testing
+// active_user.AddItem(new Item("Someone Else's Ship", "Ett rymdskepp som ingen minns vems det är.Ett bra bytesobjekt")); // Items for testing
+// active_user = null; // Log out the test user
 
 // _______ end of dummy data for testing purposes _________
 
@@ -139,10 +138,8 @@ while (continueRunning)
                             }
                             else
                             {
-                                Console.Write("Enter username: ");
-                                string? inputUsername = Console.ReadLine();
-                                Console.Write("Enter password: ");
-                                string? inputPassword = Console.ReadLine();
+                                string inputUsername = Extra.GetRequiredInput("Enter username: ");
+                                string inputPassword = Extra.GetRequiredInput("Enter password: ");
                                 // We do a check in the users list to see if the user exists.
                                 // If the user exists we set the active_user to the found user.
                                 // and to handle the case that the user is not adding something we use the null coalescing operator.
