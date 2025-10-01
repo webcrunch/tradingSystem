@@ -144,4 +144,12 @@ class User
     {
         return email == Email && password == _password;
     }
+
+    public int getAmoutOfItemsForUser()
+    {
+        // 1. Where: Filtrera Items där statusen ÄR None.
+        // 2. Count(): Räkna antalet i den filtrerade listan.
+        return Items.Where(item => item.TradingLimbo == Item.TradingStatus.None)
+                    .Count();
+    }
 }

@@ -21,8 +21,8 @@
 
 // TODO: only accept/deny the user is the recepter. ---- finished
 // TODO: only cancel the user if the sender. ---- finished
-// TODO: save to file json WIP
-// TODO: Read from json file and init data WIP
+// TODO: save to file json ---- finished
+// TODO: Read from json file and init data ---- finished
 
 // I am usign the TradingSystem namespace.
 using TradingSystem;
@@ -105,13 +105,17 @@ while (continueRunning)
     // It is a concise way to handle null values as an if statement. 
     // if we have value from active_user.Email it will be used otherwise the default message will be used.
     // Need to work even if the active_user is nill. Thats why we have activ_user?. 
-    // So it could nullable
+    // I have this check here if the user is logged in or not. if user is not logged in we send the string otherwise we send the username from the object
     Menu.MainMenu(active_user?.Username ?? "No user logged in");
     // int the switch case the user will enter the input for the main menu.
     // for the switch there is five cases.
     switch (Extra.GetIntegerInput(""))
     {
-        // The first case is for log in and log out.
+        // The first case is for log in and log out. 
+        // I am doing this because i want to break out functionality for the user 
+        // into multiple parts. 
+        // I think this is easier both when i am working with it and 
+        // when the user is using the program.
         case 1:
             // Need to check if there is no users at all 
             if (Extra.UserExisting(users))
@@ -152,10 +156,16 @@ while (continueRunning)
                                 // If the foundUser is null we display a message to the user that the login failed.
                                 // And if it is not null we display a message that the login was successful.    
                                 // and set the active_user to the found user.
+                                // I am using a find function for the users array. It works like i am looping through all the array of users
+                                // and map current user with the rules. It is checking first if the input from the user is not null.  
+                                // If that is true the rule continues and call the function TryLogin to check if the input from the user will return a true or false.
+                                // If both rules returns true then it return the user from the users array that it finds.  
                                 User? loggedInUser = users.Find(user =>
                                     (inputUsername != null && inputPassword != null) &&
                                     user.TryLogin(inputUsername, inputPassword) == true
                                 );
+                                // If we find a users we will set that user to active user. And stop the current while loop. 
+                                // That makes it go up on levet. And Display a message that login succeded. 
                                 if (loggedInUser != null)
                                 {
                                     active_user = loggedInUser;
@@ -164,6 +174,7 @@ while (continueRunning)
                                     // if have created two methods in the Extra class for displaying success and alert messages.
                                     Display.DisplaySuccesText("Login successful.");
                                 }
+                                // If we dont find any user or input is not any 
                                 else
                                 {
                                     // here is one for the alert messages function. The diffrence is the color of the text.
@@ -198,7 +209,6 @@ while (continueRunning)
                         case 3:
                             loginRunning = false;
                             break;
-
                     }
                 }
             }
@@ -228,6 +238,7 @@ while (continueRunning)
                         string CreateInputEmail = Extra.GetRequiredInput("Enter email for the account: ");
                         string CreateInputUsername = Extra.GetRequiredInput("Enter username for the account: ");
                         string CreateInputPassword = Extra.GetRequiredInput("Enter password for the account: ");
+                        // string[] userExist = users.Find(us =>  );
                         users.Add(new User(CreateInputUsername, CreateInputEmail, CreateInputPassword));
                         Display.DisplaySuccesText("Account created successfully.");
                         Extra.WaitForInput();
@@ -387,7 +398,6 @@ while (continueRunning)
                                     Console.WriteLine("\n Select a item to recive from the other\\´s users items:");
                                     receiver.ShowItems(false);
 
-                                    // string itemToRecivieName = Extra.GetRequiredInput("Enter the name of the item you want to receive: ");
                                     Item? itemToRecive = receiver.FindItem(Extra.GetRequiredInput("Enter the name of the item you want to receive: "));
                                     if (itemToRecive == null)
                                     {

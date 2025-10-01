@@ -4,6 +4,7 @@ class Menu
 {
     public static void MainMenu(string username)
     {
+        // string[] mainMenuContent = new string[]{"Login", "Account", "Item", "Trade", "Exit"};
         string userStatus = string.IsNullOrEmpty(username) ? "No user logged in" : username;
 
         Console.WriteLine();
