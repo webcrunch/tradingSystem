@@ -53,17 +53,22 @@ The following requirements have been implemented and validated:
 
   - Browse completed (accepted/denied) requests. ✅
 
+  - Able to write data for users,items,messages and trades to each own file. ✅
+
+  - Able to read from file and add it to where each data should be. ✅
+
 #### Code Structure:
 
 Refactored and separated the monolithic Extra/Utils class into dedicated, single-responsibility classes (Menu, Display, FileHandler).
 
 #### 🚧 WIP (Work In Progress)
-These two tasks represent the final steps for project completion:
+<!-- These two tasks represent the final steps for project completion:
 
 Save to File (JSON): Implement the function within the FileHandler class to save all program data (User and Trade lists) to JSON files upon program exit.
 
-Read from File (JSON): Implement the function within the FileHandler class to load all program data from JSON files upon program startup.
+Read from File (JSON): Implement the function within the FileHandler class to load all program data from JSON files upon program startup. -->
 
+There should not be any tasks from original critera left
 
 
 ## 🚀 How to Run
