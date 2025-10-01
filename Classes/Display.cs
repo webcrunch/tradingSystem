@@ -25,7 +25,7 @@ class Display
         {
             if (users[i] != active_user)
             {
-                Console.WriteLine($"{i + 1}. {users[i].Email}");
+                Console.WriteLine($"{i + 1}. {users[i].Username}. ({users[i].getAmoutOfItemsForUser()}) items for trade ");
             }
 
         }
