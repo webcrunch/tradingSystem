@@ -40,6 +40,8 @@ class User
         return _password;
     }
 
+
+
     public void displayMessage()
     {
         if (message.Count == 0)

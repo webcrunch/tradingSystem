@@ -65,11 +65,7 @@ class FileHandler
     {
         try
         {
-            foreach (string bla in MessageLine)
-            {
-                Console.WriteLine(bla);
-            }
-            // File.WriteAllLines(MessageCsvFileName, MessageLine, Encoding.UTF8);
+            File.WriteAllLines(MessageCsvFileName, MessageLine, Encoding.UTF8);
         }
         catch (Exception ex)
         {
@@ -119,7 +115,6 @@ class FileHandler
 
                 foreach (string line in itemLines)
                 {
-
                     string[] parts = line.Split(',');
 
                     if (user.Username == parts[0].Trim())
@@ -157,6 +152,51 @@ class FileHandler
     }
 
 
+    public static List<Trade> LoadTradeFRomCsv(List<User> users)
+    {
+
+        List<Trade> trades = new List<Trade>();
+        if (!File.Exists(TradeCsvFileName))
+        {
+            Console.WriteLine("bbfifififiif");
+            return trades;
+        }
+        else
+        {
+
+            List<string> tradeLines = File.ReadAllLines(TradeCsvFileName, Encoding.UTF8).Skip(1).ToList();
+            foreach (string line in tradeLines)
+            {
+                string[] parts = line.Split(',');
+                Console.WriteLine(parts.Length);
+                if (parts.Length != 4) continue;
+
+                User? sender = users.FirstOrDefault(user =>
+                    user.Username.Equals(parts[0].Trim(), StringComparison.OrdinalIgnoreCase)
+                );
+
+                User? receiver = users.FirstOrDefault(user =>
+                    user.Username.Equals(parts[1].Trim(), StringComparison.OrdinalIgnoreCase)
+                );
+
+                // // string reciver = parts[1].Trim();
+                string[] itemTradeSplit = parts[2].Trim().Split('~');
+                // System.Console.WriteLine();
+                // string item1 =
+                Item? itemToTrade = sender?.FindItem(itemTradeSplit[0]);
+                Item? itemToRecive = receiver?.FindItem(itemTradeSplit[1]);
+                Item[] newtradedItems = new Item[] { itemToTrade, itemToRecive };
+                // // string[] itemsTrade = [itemTradeSplit[0], itemTradeSplit[1]];
+                string statusStringTrade = parts[3].Trim();
+
+                // Console.WriteLine(statusStringTrade + "      " + "ddddddddd");
+                trades.Add(new Trade(sender, receiver, newtradedItems, statusStringTrade));
+            }
+            return trades;
+
+        }
+    }
+
 
     public static void SaveTradesToCsv(List<Trade> trades)
     {
@@ -168,7 +208,7 @@ class FileHandler
 
         foreach (Trade trade in trades)
         {
-            string handlingText = $"{trade.Sender.Username},{trade.Receiver.Username},[{trade.ItemTraded[0].Name},{trade.ItemTraded[1].Name}],{trade.Status}";
+            string handlingText = $"{trade.Sender.Username},{trade.Receiver.Username},{trade.ItemTraded[0].Name}~{trade.ItemTraded[1].Name},{trade.Status}";
             PrintToTrades.Add(handlingText);
         }
 

@@ -29,7 +29,7 @@ using TradingSystem;
 // There are two lists that carries the data from the users. 
 // when we start the program the lists are populating by the value of user, items and trade txt files.
 List<User> users = FileHandler.LoadUsersFromCsv();
-List<Trade> trades = new List<Trade>();
+List<Trade> trades = FileHandler.LoadTradeFRomCsv(users);
 // Ladda data vid start
 // List<User> users = FileHandler.LoadFromJson<User>(FileHandler.SaveToJsonUser);
 // List<Trade> trades = FileHandler.LoadFromJson<Trade>(FileHandler.TradeFileName);
@@ -371,7 +371,6 @@ while (continueRunning)
                                     Console.WriteLine($"Selected user: {receiver.Username}");
                                     Console.WriteLine("Select a item to trade from your items");
                                     active_user.ShowItems(false);
-                                    Console.WriteLine(active_user.ItemForTrade());
                                     // string itemToTradeName = Extra.GetRequiredInput("Enter the name of the item you want to trade:");
                                     // let the user choose a name of item. After that is sent to the function that search if the item is in the users list. 
                                     // It could be returned null if there is no found. Thats why we set Item as nullable.
@@ -409,7 +408,7 @@ while (continueRunning)
                                     itemToRecive.TradingLimbo = Item.TradingStatus.Trading;
                                     Item[] newtradedItems = new Item[] { itemToTrade, itemToRecive };
 
-                                    trades.Add(new Trade(active_user, receiver, newtradedItems));
+                                    trades.Add(new Trade(active_user, receiver, newtradedItems, "None"));
                                     string senderMessage = $"You have sent a trade request to {receiver.Email} for item {itemToRecive.Name}.";
                                     string receiverMessage = $"{active_user.Username} has requested to trade their item {itemToTrade.Name} for your item {itemToRecive.Name}.";
 

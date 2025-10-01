@@ -22,16 +22,30 @@ namespace TradingSystem
         public Item[] ItemTraded;
 
         // Current status of the trade
-        public TradeStatus Status = TradeStatus.None;
+        public TradeStatus Status;
 
         // Constructor to initialize a trade
-        public Trade(User sender, User receiver, Item[] items)
+        public Trade(User sender, User receiver, Item[] items, string status)
         {
             Sender = sender;
             Receiver = receiver;
             ItemTraded = items;
-            Status = TradeStatus.Pending; // Set initial status to Pending
+            // Status = TradeStatus.Pending; // Set initial status to Pending
+            // 1. Förbered variabel för parsning
+            TradeStatus parsedStatus;
+
+            // 2. Försök konvertera strängen 'status' till TradeStatus enum.
+            // 'true' ignoreras skiftläget (t.ex. "pending" matchar TradeStatus.Pending).
+            bool success = Enum.TryParse(status, true, out parsedStatus);
+
+            // 3. Sätt Trade-objektets status:
+            //    Om konverteringen lyckades (success är true), använd det parsade värdet.
+            //    Annars, sätt det till defaultvärdet TradeStatus.None.
+            Status = success
+               ? parsedStatus
+               : TradeStatus.None;
         }
+
 
         // Method to accept the trade and exchange items
         public void AcceptTrade()
