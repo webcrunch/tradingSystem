@@ -19,8 +19,8 @@ class FileHandler
         List<string> PrintToUsers = new List<string>() { "Username,Email,Password" };
         // 2. Lista för Items (Aggregerar ALLA items från ALLA users)
         // Denna lista är tom vid start av denna funktion, vilket förhindrar dubbletter.
-        List<string> PrintToItems = new List<string>() { "Owner_Username,ItemName,Description", "tradingLimbo" };
-        List<string> PrintToMessage = new List<string>() { "messageOwner", "message" };
+        List<string> PrintToItems = new List<string>() { "Owner_Username,ItemName,Description,tradingLimbo" };
+        List<string> PrintToMessage = new List<string>() { "messageOwner,message" };
 
         foreach (User user in users)
         {
@@ -37,7 +37,6 @@ class FileHandler
 
             foreach (string message in user.message)
             {
-                Console.WriteLine(message + " " + user.Username);
                 // Inkludera ägarens Username för att veta vem som äger föremålet
                 string itemHandlingText = $"{user.Username},{message}";
                 PrintToMessage.Add(itemHandlingText);
@@ -53,12 +52,11 @@ class FileHandler
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"FEL vid export av användare till CSV: {ex.Message}");
+            Console.WriteLine($"ERROR: sometinh happend when we exported the users to CVS: {ex.Message}");
         }
 
         // --- SAVE THE ITEMS ---
         // Call an dedicated function to write over the file with current data
-        Console.WriteLine(PrintToItems);
         SaveAllItemsToCsv(PrintToItems);
         SaveAllMessagesToCsv(PrintToMessage);
     }
@@ -67,7 +65,11 @@ class FileHandler
     {
         try
         {
-            File.WriteAllLines(MessageCsvFileName, MessageLine, Encoding.UTF8);
+            foreach (string bla in MessageLine)
+            {
+                Console.WriteLine(bla);
+            }
+            // File.WriteAllLines(MessageCsvFileName, MessageLine, Encoding.UTF8);
         }
         catch (Exception ex)
         {
@@ -75,19 +77,12 @@ class FileHandler
         }
     }
 
-    // public static void LoadItemsFromCvs(User currentUser)
-    // {
-
-
-    // }
-
     public static List<User> LoadUsersFromCsv()
     {
         List<User> users = new List<User>();
         // 1. Returnera tom lista om filen saknas
         if (!File.Exists(UserCsvFileName))
         {
-            // Console.WriteLine($"Filen '{UserCsvFileName}' hittades inte. Startar med tom användarlista.");
             users.Add(new User("testUser", "test", "test")); // User1 for testing
             users.Add(new User("albert", "beteman", "test")); // User2 for testing
             users.Add(new User("jarl", "jarleman", "test")); // User3 user for testing
@@ -100,7 +95,6 @@ class FileHandler
 
         try
         {
-            // Läs alla rader och hoppa över headern
             List<string> userLines = File.ReadAllLines(UserCsvFileName, Encoding.UTF8).Skip(1).ToList();
             List<Item> items = new List<Item>();
             List<string> itemLines = File.ReadAllLines(ItemsCsvFileName, Encoding.UTF8).Skip(1).ToList(); // cant use skip because it is a LINQ, SOLVE this
@@ -142,23 +136,20 @@ class FileHandler
 
                 foreach (string message in messageLines)
                 {
-
                     string[] messagePart = message.Split(',');
                     if (user.Username == messagePart[0].Trim())
                     {
-
                         if (messagePart.Length != 2) continue;
                         string messageText = messagePart[1].Trim();
                         user.message.Add(messageText);
                     }
-
                 }
 
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"FEL vid laddning av användare från CSV: {ex.Message}. Returnerar tom lista.");
+            Console.WriteLine($"ERROR:  something happend on loading from the CSV: {ex.Message}. Returnerar tom lista.");
             return new List<User>();
         }
 
