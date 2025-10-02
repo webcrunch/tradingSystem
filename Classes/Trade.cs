@@ -1,7 +1,12 @@
 // Namespace for the trading system
 namespace TradingSystem
 {
-    // Enum representing the possible statuses of a trade
+
+    /// <summary>
+    /// Possible states of a trade.
+    /// We are using this for status if the trade object
+    /// </summary>
+
     enum TradeStatus
     {
         None,       // No status set
@@ -11,18 +16,38 @@ namespace TradingSystem
         Canceled    // Trade has been canceled
     }
 
-    // Class representing a trade between two users
+
+
+    // <summary>
+    /// Represents a trade between two users, including items and status.
+    /// </summary>
     class Trade
     {
-        // The user who initiated the trade
+        /// <summary>
+        /// The user who initiated the trade.
+        /// </summary>
         public User Sender;
-        // The user who receives the trade request
+
+        /// <summary>
+        /// The user who receives the trade request.
+        /// </summary>
         public User Receiver;
-        // Array containing the items being traded: [0] first index place, from sender, [1] second index place, from receiver
+
+        /// <summary>
+        /// Items being traded: index 0 = from sender, index 1 = from receiver.
+        /// </summary>
         public Item[] ItemTraded;
 
-        // Current status of the trade
+        /// <summary>
+        /// Current status of the trade.
+        /// </summary>
         public TradeStatus Status;
+
+        /// <summary>
+        /// Initializes a new trade between two users with given items and status.
+        /// Status string is parsed into <see cref="TradeStatus"/> (case-insensitive).
+        /// Defaults to <see cref="TradeStatus.None"/> if parsing fails.
+        /// </summary>
 
         // Constructor to initialize a trade
         public Trade(User sender, User receiver, Item[] items, string status)
@@ -30,24 +55,29 @@ namespace TradingSystem
             Sender = sender;
             Receiver = receiver;
             ItemTraded = items;
-            // Status = TradeStatus.Pending; // Set initial status to Pending
-            // 1. Förbered variabel för parsning
+
+
+            /// <summary>
+            /// Because i am using strings in the saving to file we need to convert the string into number
+            /// The enum has also a tryparse. What it does it takes the value. And in this example it will be a string. 
+            /// We can say it is None. It tries to find the value in the enum and convert it into a index. 
+            /// Here are the syntax for the enum. 
+            /// After that i am using a iternary to say if i get a enum we will set that to status otherwise i user the None status
+            /// bool success = Enum.TryParse<TEnum>(
+            /// string value,          // value to convert
+            ///bool ignoreCase,       // if i want to ignore upper/smaller case. 
+            ///out TEnum result       // output parameter that will get the enum value
+            ///);
+            /// </summary>
             TradeStatus parsedStatus;
-
-            // 2. Försök konvertera strängen 'status' till TradeStatus enum.
-            // 'true' ignoreras skiftläget (t.ex. "pending" matchar TradeStatus.Pending).
             bool success = Enum.TryParse(status, true, out parsedStatus);
-
-            // 3. Sätt Trade-objektets status:
-            //    Om konverteringen lyckades (success är true), använd det parsade värdet.
-            //    Annars, sätt det till defaultvärdet TradeStatus.None.
-            Status = success
-               ? parsedStatus
-               : TradeStatus.None;
+            Status = success ? parsedStatus : TradeStatus.None;
         }
-
-
-        // Method to accept the trade and exchange items
+        /// <summary>
+        /// Accepts the trade, exchanges items between users, 
+        /// updates status to <see cref="TradeStatus.Accepted"/>, 
+        /// and notifies both users.
+        /// </summary>
         public void AcceptTrade()
         {
             // Only allow accepting if trade is pending
@@ -71,10 +101,15 @@ namespace TradingSystem
             // Notify both users about the accepted trade
             string senderMessage = $"Your trade with {Receiver.Email} has been accepted. You received item: {itemFromReceiver.Name}.";
             string receiverMessage = $"You accepted the trade with {Sender.Email}. You received item: {itemFromSender.Name}.";
-            Sender.message.Add(senderMessage);
-            Receiver.message.Add(receiverMessage);
+            Sender.Messages.Add(senderMessage);
+            Receiver.Messages.Add(receiverMessage);
         }
 
+        /// <summary>
+        /// Denies the trade, resets item states, 
+        /// updates status to <see cref="TradeStatus.Denied"/>, 
+        /// and notifies both users.
+        /// </summary>
         // Method to deny the trade
         public void DenyTrade()
         {
@@ -90,8 +125,8 @@ namespace TradingSystem
             // Notify both users about the denied trade
             string senderMessage = $"Your trade with {Receiver.Email} has been denied.";
             string receiverMessage = $"You denied the trade with {Sender.Email}.";
-            Sender.message.Add(senderMessage);
-            Receiver.message.Add(receiverMessage);
+            Sender.Messages.Add(senderMessage);
+            Receiver.Messages.Add(receiverMessage);
         }
     }
 }
