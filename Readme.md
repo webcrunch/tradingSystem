@@ -12,7 +12,7 @@ A simple console-based trading system written in C# (.NET 9). This project allow
 - **Data Persistence**: Uses JSON for saving user, users item and trade data between sessions.
 
 
-## ✅ Projektstatus: Trading System
+## ✅ Projektstatus: All is done :)  
 
  Completion of  the core business logic and user interaction features! Focusing on implementing robust data persistence.
 
@@ -152,15 +152,16 @@ Rationale: Using Composition (the "has-a" relationship) results in clear, flexib
   - `User.cs` — User model and authentication
   - `Item.cs` — Item model
   - `Trade.cs` — Trade model and status
-  - `Display.cs` — Display functions
-  - `Trade.cs` — menu functions
-  - `Utils.cs` — Utility and validation function
+  - `Display.cs` — Output and presentation functions (color-coded messages, list formatting).
+  - `Menu.cs` — Dedicated functions for printing all console menus.
+  - `FileHandler.cs` — Handles all JSON persistence (data loading and saving).
+  - `Extra.cs` — Utility functions for user input validation (e.g., ensuring integer input).
 - `trading_system.csproj` — Project file
 
 ## Notes
 - The project uses in-memory lists for users and items (no database).
 - Default test users and items are created at startup for demonstration.
-- WIP: json read and write for handling saving data to file
+
 
 ## Example Menu
 ```
