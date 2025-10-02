@@ -1,7 +1,21 @@
 namespace TradingSystem;
 
+/// <summary>
+/// Provides static methods for displaying different console menus
+/// in the Trading System application. 
+/// My ide was to break out functions that is using multiple times in the Program.cs
+/// Working with DRY mentality.
+/// We could have a more dynamical menu. And build it from inputs through parameters but it will take
+/// to much time for this small project
+/// I have tried to split the menu into multiple types. For exampel login, trade and item etc. 
+/// </summary>
 class Menu
 {
+    /// <summary>
+    /// Displays the main menu of the trading system.
+    /// Shows the current user if logged in, otherwise "No user logged in".
+    /// </summary>
+    /// <param name="username">The username of the currently logged-in user, or empty if none.</param>
     public static void MainMenu(string username)
     {
         // string[] mainMenuContent = new string[]{"Login", "Account", "Item", "Trade", "Exit"};
@@ -28,6 +42,10 @@ class Menu
         Console.ResetColor(); // Återställer textfärgen
     }
 
+    /// <summary>
+    /// Displays the account management menu.
+    /// Options include adding or deleting accounts.
+    /// </summary>
     public static void Accountmenu()
     {
         Console.WriteLine();
@@ -44,7 +62,10 @@ class Menu
         Console.ResetColor(); // Återställer textfärgen
     }
 
-
+    /// <summary>
+    /// Displays the trade menu.
+    /// Options include starting trades, viewing messages, or handling trades.
+    /// </summary>
     public static void Trademenu()
     {
         Console.WriteLine();
@@ -62,7 +83,10 @@ class Menu
         Console.ResetColor(); // Återställer textfärgen
     }
 
-
+    /// <summary>
+    /// Displays the item menu.
+    /// Options include adding, showing own items, or showing others' items.
+    /// </summary>
     public static void itemMenu()
     {
         Console.WriteLine();
@@ -82,7 +106,10 @@ class Menu
 
 
 
-
+    /// <summary>
+    /// Displays the trade handling menu.
+    /// Options include viewing sent, received, accepted, or denied requests.
+    /// </summary>
     public static void ShowTradeHandlingMenu()
     {
         Console.WriteLine();
@@ -100,6 +127,11 @@ class Menu
         Console.WriteLine(" ╚═════════════════════════╝ ");
         Console.ResetColor(); // Återställer textfärgen
     }
+
+    /// <summary>
+    /// Displays the trade options menu.
+    /// Options include accepting, denying, or ignoring a trade.
+    /// </summary>
     public static void TradeOptionsMenu()
     {
 
@@ -114,6 +146,11 @@ class Menu
         Console.ResetColor(); // Återställer textfärgen
         Console.WriteLine("\n");
     }
+
+    /// <summary>
+    /// Displays the login/logout menu.
+    /// Options include logging in, logging out, or going back.
+    /// </summary>
     public static void AddLoginMenu()
     {
         Console.WriteLine();
