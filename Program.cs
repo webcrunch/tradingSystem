@@ -4,100 +4,72 @@
 // TODO: A user needs to be able to log in. ----- finished
 // TODO: A user needs to be able to upload information about the item 
 // TODO: they wish to trade. ---- finished
-
 // TODO: A user needs to be able to browse a list of other users items. ---- finished
-
 // TODO: Refactor the need above . ---- finished 
 // TODO: A user needs to be able to request a trade for other users items. ---- finished
 // TODO: A user needs to be able to see a list of their sent trade requests. ---- finished
 // TODO: A user needs to be able to cancel a sent trade request. ---- finished
-
 // TODO: A user needs to be able to browse trade requests. --- finished
-
 // TODO: A user needs to be able to accept a trade request. --- finished
 // TODO: A user needs to be able to deny a trade request. --- finished
-
 // TODO: A user needs to be able to browse completed requests. --- finished
-
-// TODO: only accept/deny the user is the recepter. ---- finished
-// TODO: only cancel the user if the sender. ---- finished
+// TODO: only accept/deny if the user is the receiver. ---- finished
+// TODO: only cancel if the user is the sender. ---- finished
 // TODO: save to file json ---- finished
 // TODO: Read from json file and init data ---- finished
 
-// I am usign the TradingSystem namespace.
 using TradingSystem;
-// There are two lists that carries the data from the users. 
-// when we start the program the lists are populating by the value of user, items and trade txt files.
+
+
+/// <summary>
+/// Holds all registered users in memory. 
+/// Loaded from CSV at program start.
+/// </summary>
 List<User> users = FileHandler.LoadUsersFromCsv();
+
+/// <summary>
+/// Holds all trades in memory. 
+/// Loaded from CSV at program start.
+/// </summary>
 List<Trade> trades = FileHandler.LoadTradeFRomCsv(users);
-// Ladda data vid start
-// List<User> users = FileHandler.LoadFromJson<User>(FileHandler.SaveToJsonUser);
-// List<Trade> trades = FileHandler.LoadFromJson<Trade>(FileHandler.TradeFileName);
 
 
-// This bool is for controlling the main loop of the program.
+/// <summary>
+/// Controls the main program loop. 
+/// Set to false when the user chooses to exit.
+/// </summary>
 bool continueRunning = true;
-// This is for keeping track of the currently logged-in user. 
-// default value is null, meaning no user is logged in.
+
+/// <summary>
+/// Tracks the currently logged-in user. 
+/// Null means no user is logged in.
+/// </summary>
 User? active_user = null;
 
+
 // _______ dummy data for testing purposes _________
-// Creating a dump user and item for testing
-// creating three users and two items for each user.
-// This is just for testing purposes. and to be able to see how the program works.
-// users.Add(new User("testUser", "test", "test")); // User1 for testing
-// users.Add(new User("albert", "beteman", "test")); // User2 for testing
-// users.Add(new User("jarl", "jarleman", "test")); // User3 user for testing
-// users.Add(new User("Cat_AYBABTU", "cat@z88.net", "test")); // User3 user for testing
-// users.Add(new User("TheNegotiator", "zero_wing@trade.com", "test")); // User3 user for testing
-// users.Add(new User("LoneWanderer", "vault101@trade.com", "test")); // User3 user for testing
-// users.Add(new User("AYBABTU@trade.com", "1991", "test"));
-// Log in and create some items for the first user
-// active_user = users[0]; // Log in the test user
-// active_user.AddItem(new Item("Böcker", "32 stycken nalle puh böcker")); // Items for testing
-// active_user.AddItem(new Item("handskar", "2 par elefanthanskar")); // Items for testing
-// active_user = null; // Log out the test user
-// // Creating dummy data and log in for the second user
-// active_user = users[1]; // Log in the test user
-// active_user.AddItem(new Item("Abombs", "100 stora atombomber")); // Items for testing
-// active_user.AddItem(new Item("skor", "2 par elefantskor")); // Items for testing
-// active_user = null; // Log out the test user
-// // Creating dummy data and log in for the third user
-// active_user = users[2]; // Log in the test user
-// active_user.AddItem(new Item("Bilar", "32 stycken leksaksbilar")); // Items for testing
-// active_user.AddItem(new Item("dator", "en macbook pro 2020")); // Items for testing
-// active_user = null; // Log out the test user
-
-// active_user = users[3]; // Log in the test user
-// active_user.AddItem(new Item("Zero Wing Module", "Kärnmodulen från Zero Wing - kapseln.Kan vara viktigt.")); // Items for testing
-// active_user.AddItem(new Item("A Big Red Button", "You Set Up Us The Bomb")); // Items for testing, Handling this trade item specila
-
-// active_user = null; // Log out the test user
-
-// active_user = users[4]; // Log in the test user
-// active_user.AddItem(new Item("All Base Keycard", "Giver dig tillgång till alla dörrar.Kräver dock att alla dina baser tillhör oss")); // Items for testing
-// active_user.AddItem(new Item("Main Screen Blueprint", "Ritningar för att slå på huvudskärmen. Försiktighet rekommenderas")); // Items for testing
-// active_user.AddItem(new Item("Make Your Time Watch", "Ett armbandsur ställt på 'NU'. Kan inte justeras")); // Items for testing
-// active_user.AddItem(new Item("Someone Else's Ship", "Ett rymdskepp som ingen minns vems det är.Ett bra bytesobjekt")); // Items for testing
-// active_user = null; // Log out the test user
-
+// (commented-out code for creating test users and items)
+// This section was used for development and debugging.
 // _______ end of dummy data for testing purposes _________
 
-// i have decided to create a class named Menu for handling the menu system.
-// The class is static because i do not need to create an instance of it.
-// it is mostly for displaying the menus and some helper functions. 
-// And to try to keep the Program.cs file clean.
 
-// to keep a live loop of the program until the user decides to exit.
-// I have choosen to build the logic for the menu system with two layers. 
-// Login - Account - Item - Trade - Exit
-// Login - login - log out - go back to main menu
-// Account - create account - go back to main menu
-// Item - add item - show my items - show all other users items - go back to main menu
-// Trade - request trade - message of trades - handle trades - go back to main menu
-// I have tried to keep it simple and easy to understand for the user. Still some improvements can be made. 
-// Especially in the trade handling menu to handle exiting in a user input face.
-// Each menu has its own while loop and switch case for handling the user input.
+/// <summary>
+/// The <see cref="Menu"/> class is used to handle all menu displays.
+/// It is static because no instance is required.
+/// This keeps Program.cs cleaner and separates UI logic.
+/// </summary>
+
+
+/// <summary>
+/// The menu system is built with two layers:
+/// - Main menu: Login, Account, Item, Trade, Exit
+/// - Submenus: 
+///   * Login: log in, log out, back to main
+///   * Account: create account, back to main
+///   * Item: add item, show my items, show others' items, back to main
+///   * Trade: request trade, view messages, handle trades, back to main
+/// Each menu has its own loop and switch-case for handling user input.
+/// </summary>
 while (continueRunning)
 {
     // call for the main menu from the Extra class, passing the email of the active user or a default message if no user is logged in.  
@@ -107,8 +79,10 @@ while (continueRunning)
     // Need to work even if the active_user is nill. Thats why we have activ_user?. 
     // I have this check here if the user is logged in or not. if user is not logged in we send the string otherwise we send the username from the object
     Menu.MainMenu(active_user?.Username ?? "No user logged in");
-    // int the switch case the user will enter the input for the main menu.
-    // for the switch there is five cases.
+    /// <summary>
+    /// Main menu switch. Handles user input for the top-level menu.
+    /// Options: Login/Logout, Account, Item, Trade, Exit.
+    /// </summary>
     switch (Extra.GetIntegerInput(""))
     {
         // The first case is for log in and log out. 
@@ -117,10 +91,15 @@ while (continueRunning)
         // I think this is easier both when i am working with it and 
         // when the user is using the program.
         case 1:
-            // Need to check if there is no users at all 
+            /// <summary>
+            /// Case 1: Login/Logout menu.
+            /// Checks if users exist, then opens a sub-loop for login handling.
+            /// </summary>
             if (Extra.UserExisting(users))
             {
-                // here we have another bool  for keeping the login menu running.
+                /// <summary>
+                /// Login menu loop. Runs until user chooses to exit.
+                /// </summary>
                 bool loginRunning = true;
                 // and the while loop that keeps it running until the loginRunning will be false.
                 while (loginRunning)
@@ -412,8 +391,8 @@ while (continueRunning)
                                     string senderMessage = $"You have sent a trade request to {receiver.Email} for item {itemToRecive.Name}.";
                                     string receiverMessage = $"{active_user.Username} has requested to trade their item {itemToTrade.Name} for your item {itemToRecive.Name}.";
 
-                                    active_user.message.Add(senderMessage);
-                                    receiver.message.Add(receiverMessage);
+                                    active_user.Messages.Add(senderMessage);
+                                    receiver.Messages.Add(receiverMessage);
 
                                     Display.DisplaySuccesText("Trade request sent succefully");
                                 }
@@ -475,8 +454,8 @@ while (continueRunning)
                                                 tradeToCancel.ItemTraded[1].TradingLimbo = Item.TradingStatus.None;
                                                 string senderMessage = $"You have canceled the trade request to {tradeToCancel.Receiver.Email}.";
                                                 string receiverMessage = $"{active_user.Email} has canceled the trade request.";
-                                                active_user.message.Add(senderMessage);
-                                                tradeToCancel.Receiver.message.Add(receiverMessage);
+                                                active_user.Messages.Add(senderMessage);
+                                                tradeToCancel.Receiver.Messages.Add(receiverMessage);
                                                 Display.DisplaySuccesText("Trade request canceled.");
                                             }
                                             else

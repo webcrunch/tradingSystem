@@ -1,0 +1,7 @@
+namespace TradingSystem;
+
+
+class HandlingLogin
+{
+
+}

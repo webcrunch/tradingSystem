@@ -50,7 +50,7 @@ namespace TradingSystem
         /// </summary>
 
         // Constructor to initialize a trade
-        public Trade(User sender, User receiver, Item[] items, string status)
+        public Trade(User sender, User receiver, Item[] items, string statusString)
         {
             Sender = sender;
             Receiver = receiver;
@@ -70,7 +70,7 @@ namespace TradingSystem
             ///);
             /// </summary>
             TradeStatus parsedStatus;
-            bool success = Enum.TryParse(status, true, out parsedStatus);
+            bool success = Enum.TryParse(statusString, true, out parsedStatus);
             Status = success ? parsedStatus : TradeStatus.None;
         }
         /// <summary>
